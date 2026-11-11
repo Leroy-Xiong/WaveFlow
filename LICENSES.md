@@ -29,12 +29,6 @@ Commons Attribution 4.0 International licence
 (https://creativecommons.org/licenses/by/4.0/). Attribution: cite the paper
 and the Zenodo weight record (see `CITATION.cff`).
 
-## Figure source data
-
-Derived statistics, model samples and open-government assets are provided under
-the same CC BY 4.0 terms to the extent the authors hold the rights. The
-underlying public datasets keep their own licences; see `THIRD_PARTY.md`.
-
 ## Fonts
 
 The bundled TeX Gyre Heros OTFs are distributed under the GUST Font License;

@@ -16,10 +16,9 @@ and model assets from Hugging Face, verifies their SHA256, and reports which
 hindcast reference frames are present. Weights land in `weights/`; the asset
 archive restores `data/` mesh assets.
 
-The paper's figure source data are provided as **Source Data with the article**
-and are not downloaded by this command. Unpack that archive at the repository
-root to restore the original `data/` and `output/` paths used by the rendering
-commands.
+The figure-rendering commands assume the data tree used by the paper scripts
+is present at the repository root (`data/` and `output/`). `setup` does not
+download it.
 
 ### Cartopy coastlines
 
@@ -186,7 +185,7 @@ release acceptance test.
 |---|---|
 | `no URL configured ...` | the Zenodo record is not public yet; set the URLs in `reproduce/downloads.yaml` or use your local archive |
 | `BAD SHA256` | re-download; do not edit the archive |
-| `missing ... samples` | unpack the Source Data archive from the paper at the repository root; `setup` does not download it |
+| `missing ... samples` | restore the paper data tree at the repository root; `setup` does not download it |
 | `missing ... hindcast` | see §1 and `DATA.md`; set `WF_GT_*` |
 | map text differs from the paper | make sure `scripts/figures/fonts/` contains the four TeX Gyre Heros OTFs and matplotlib has a clean font cache (`rm -rf ~/.cache/matplotlib`) |
 | `cartopy` attempts to download data offline | pre-fetch Natural Earth/GSHHS (§0) |

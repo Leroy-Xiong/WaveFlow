@@ -134,9 +134,8 @@ bring your own copy (see `DATA.md`).
 ## Reproduce the paper figures
 
 Figure reproduction is one feature of this release, not its only purpose.
-The samples and derived statistics behind the figures are provided as Source
-Data with the article and are not redistributed in this repository. If you have
-that archive, unpack it at the repository root, then:
+The figure-rendering commands assume the data tree used by the paper scripts
+is present at the repository root. Then:
 
 ```bash
 python reproduce.py setup --weights
@@ -145,8 +144,8 @@ python reproduce.py all                # panels that need no hindcast
 python reproduce.py verify             # pixel comparison against reference/
 ```
 
-Outputs land in `reproduced/`. Without the Source Data archive only the model
-inference and training paths are available. The full panel map, hindcast
+Outputs land in `reproduced/`. Without that data tree only the model inference
+and training paths are available. The full panel map, hindcast
 requirements and GPU re-inference recipes are in `REPRODUCE.md`.
 
 ## Repository layout
@@ -159,15 +158,13 @@ reproduce/           figure-reproduction CLI and panel renderers
 reference/           paper figures + exact panel crops used for verification
 scripts/             paper figure scripts and release overrides
 weights/             downloaded checkpoints (gitignored)
-data/, output/       downloaded assets / unpacked Source Data (gitignored)
+data/, output/       downloaded assets / paper data tree (gitignored)
 ```
 
 ## Data and licensing
 
 - Code: MIT (`LICENSE`).
 - Weights: CC BY 4.0 (see `LICENSES.md`).
-- Figure source data: provided as Source Data with the paper; third-party
-  assets retain their own terms (`THIRD_PARTY.md`).
 - Hindcast targets: third-party, not redistributed (`DATA.md`).
 - ERA5, IFS/WeatherBench2, GenCast/GraphCast, CMEMS, HKO and LandsD sources are
   listed in `DATA.md` and `THIRD_PARTY.md`.

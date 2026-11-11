@@ -82,8 +82,7 @@ them within sampling noise.
 The model is a conditional flow-matching generator: every member starts from
 independent Gaussian noise. Re-running inference therefore produces different
 individual members (and slightly different ensemble means) from the paper run.
-The released figure source data contains the exact samples used for the paper
-figures, which is what the render tier uses. For the inference tier, expect:
+For the inference tier, expect:
 
 - same shapes, finite values and physical ranges;
 - ensemble-mean differences of a few percent (documented tolerances in

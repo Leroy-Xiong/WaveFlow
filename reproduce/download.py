@@ -8,8 +8,7 @@ when the Zenodo records are published). Downloads are resumable and verified.
     python download.py --forcing          # optional global IFS-ENS case forcing
 
 Weights land in ``weights/``; the asset archive is extracted at the repository
-root. The paper's figure source data are provided as Source Data with the
-article and are not downloaded here.
+root.
 """
 from __future__ import annotations
 
@@ -173,9 +172,8 @@ def get_weights(dl):
 
 def get_figure_data(dl):
     raise SystemExit(
-        "figure source data are not distributed with this release; they are "
-        "provided as Source Data with the paper. Unpack that archive at the "
-        "repository root to use the figure-rendering commands.")
+        "figure data are not distributed with this release; restore the paper "
+        "data tree at the repository root to use the figure-rendering commands.")
     arch = ARCHIVE_DIR / spec.get("archive", "waveflow-v1.0.0-figure-data.tar.gz")
     download(spec["url"], arch, spec.get("sha256", ""),
              int(spec.get("size_bytes", 0) or 0))
