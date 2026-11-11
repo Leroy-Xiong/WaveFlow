@@ -244,6 +244,23 @@ def fig3f():
     return fig
 
 
+def _fig5_modules():
+    sys.path.insert(0, str(REPO / "scripts/figures/figure5"))
+    sys.path.insert(0, str(REPO / "reproduce/panels"))
+    import fig5ghi
+    import plot_figure5_case as CASE
+    import plot_figure5_global as GLOB
+    return fig5ghi, CASE, GLOB
+
+
+def _fig5_data(CASE, GLOB):
+    hk = np.load(REPO / CASE.COORDS)
+    gc = np.load(REPO / GLOB.COORDS)
+    gt_hk = CASE.gt_hs(CASE.T_MAP)
+    gt_global = GLOB.gt_hs("20220928T12")
+    return hk, gc, gt_hk, gt_global
+
+
 def fig5g():
     F, CASE, GLOB = _fig5_modules()
     hk = np.load(REPO / CASE.COORDS)
@@ -301,15 +318,36 @@ def fig5g():
 
 def fig5h():
     F, CASE, GLOB = _fig5_modules()
-    _hk, gc, _gth, gt_global = _fig5_data(CASE, GLOB)
-    fig = plt.figure(figsize=(180 / 25.4, 32 / 25.4))
-    GLOB.draw_global_mean_row(fig, gc[:, 1], gc[:, 0], gt_global,
-                              x0=8.0, y_top=9.0, map_w=30.0, dx=32.5,
-                              canvas=(180.0, 32.0), rmse=None,
-                              show_rmse=False, ts="20220928T12",
-                              tmpls=F.CASE_TMPL)
-    fig.suptitle("Fig. 5h: global Hurricane Ian case (reference + 4 leads)",
-                 fontsize=9, y=0.99)
+    gc = np.load(REPO / GLOB.COORDS)
+    lats, lons = gc[:, 0], gc[:, 1]
+    ts = "20220928T12"
+    gt = GLOB.gt_hs(ts)
+    tmpls = F.CASE_TMPL
+
+    W, H = 180.0, 152.0
+    fig = plt.figure(figsize=(W / 25.4, H / 25.4))
+    map_w = 70.0
+    map_h = map_w / 1.9717
+    xcols = [12.0, 98.0]
+    yrows = [14.0, 58.0, 102.0]
+    items = [(0, 0, gt, "Reference")]
+    for i, lead in enumerate(GLOB.LEADS):
+        vals = GLOB.ens_mean_hs(lead, ts, tmpls.get(lead))
+        items.append(((i + 1) // 2, (i + 1) % 2, vals, f"{lead} h lead"))
+
+    sc = None
+    for row, col, vals, title in items:
+        _ax, sc = GLOB.draw_robinson(
+            fig, xcols[col], yrows[row], map_w, map_h, lons, lats, vals,
+            title, "turbo", 0.0, GLOB.HS_VMAX, canvas=(W, H))
+
+    cax = fig.add_axes([0.22, 0.035, 0.56, 0.010])
+    cb = fig.colorbar(sc, cax=cax, orientation="horizontal")
+    cb.set_label("$H_s$ (m)", fontsize=8, labelpad=4)
+    cb.ax.xaxis.set_label_position("top")
+    cb.ax.tick_params(labelsize=7)
+    fig.suptitle("Fig. 5h: global Hurricane Ian case, 2-column layout",
+                 fontsize=12, y=0.995)
     return fig
 
 
