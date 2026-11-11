@@ -55,14 +55,10 @@ coordinates, clusters, statistics and ocean boundary under `data/`.
 
 ### 3. Run an ensemble
 
-The tested entry points for the paper cases:
-
-```bash
-python reproduce.py infer fig3f    # global Hs, 1 timestamp x 10 members
-python reproduce.py infer ed5      # Hong Kong 4-var, 2 timestamps x 10
-python reproduce.py infer ed6      # global 4-var, 2 timestamps x 10
-python reproduce.py infer fig6     # Hong Kong 4-var, 49 h x 100 + overtopping
-```
+Open [`notebooks/waveflow_reproduce.ipynb`](notebooks/waveflow_reproduce.ipynb):
+it downloads the released weights and ERA5 case forcing, reproduces the public
+paper panel (Fig. 3f), and lists which panels need the paper data tree or the
+third-party hindcast.
 
 For your own inputs, call the sampler directly. The pattern for the Hong Kong
 model is:
