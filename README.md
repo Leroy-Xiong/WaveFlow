@@ -41,8 +41,7 @@ conda activate waveflow
 ```
 
 A pip-only recipe is in `requirements-pip.txt`; an NVIDIA GPU with CUDA is
-required for sampling and training (CPU rendering works for the figure
-panels only).
+required for sampling and training.
 
 ### 2. Get the weights
 
