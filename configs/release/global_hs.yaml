@@ -1,0 +1,83 @@
+# WaveFlow v1.0.0 release config (global).
+# Exact architecture/training recipe of the released checkpoint;
+# checkpoint path, data root and sampling targets are supplied by
+# reproduce.py infer via -o overrides. EMA weights are baked in.
+training:
+  epochs: 200
+  log_interval: 50
+  batch_size: 54
+  seed: 42
+  base_learning_rate: 1e-4
+  base_batch_size: 128
+  learning_rate: 1e-4
+  checkpoint_interval: 10
+  warmup_epochs: 5
+  scheduler_type: cosine
+  grad_clip_norm: 1.0
+  use_ema: false
+  ema_decay: 0.999
+  ema_update_after_step: 100
+  use_prores: false
+  prores_warmup_epochs: 1
+data:
+  data_dir: ./data/global_hindcast/npy_files
+  coord_file_path: ./data/global_hindcast/global_coordinates.npy
+  stats_file: ./data/global_hindcast/statistics.json
+  era5_stats_file: ./data/era5/era5_statistics_global.json
+  variables:
+  - hs
+  cluster_file: ./data/global_hindcast/global_clusters_2048.npz
+  region: global
+  era5_dir: ./data/era5/global_npz_files
+  file_format: npy_daily
+  era5_file_format: npy_daily
+  use_preinterpolated_era5: true
+dataset:
+  num_workers: 24
+  pin_memory: true
+  use_patches: true
+  prefetch_factor: 1
+  persistent_workers: true
+  use_mmap: false
+model:
+  in_channels: 1
+  conditional_generation: true
+  model_type: huge
+  multimodal_fusion_type: direct_concat
+  era5_encoder_type: vit
+  era5_patch_size: 30
+  era5_num_frames: 4
+  coord_encoding_type: spherical_3d
+  local_coord_type: 3d
+  use_decoder_coord_encoding: true
+  decoder_mlp_depth: 2
+  prediction_type: x_pred
+  t_eps: 5e-2
+  use_amp: true
+  compile: true
+  compile_mode: default
+  qk_norm: true
+  use_layer_scale: true
+  layer_scale_init: 1.0e-05
+sampling:
+  total_samples: 100
+  steps: 50
+  batch_size: 16
+  save_dir: samples
+  test_subset_ratio: 1
+  sample_split: test
+  ensemble_size: 10
+  resume_sample_path: null
+  use_ema_for_sampling: false
+  atm_source: era5
+  ens_lead_time: 24
+  ens_dir: ./data/ifs_ens
+  gencast_dir: ./data/gencast_global
+checkpoint:
+  resume_path: null
+  resume_training: false
+  load_optimizer: false
+work_dir:
+  path: null
+  base_dir: ./output/results/global/new_data_hs/patch2048_4frames_concat_wucos_ema999gc_xpred_huge
+  prefix: train

@@ -1,0 +1,227 @@
+# Panel / figure reproduction contract for the release CLI.
+#
+# kind: "panel" -> a release panel script renders a full canvas; reproduce.py
+#                  crops the boxes below into reproduced/<name>.png.
+#       "whole" -> an original paper script renders the complete figure; the
+#                  declared `output` file is copied to reproduced/<name>.<ext>.
+#
+# `reference_source` is the paper figure used at build time by
+# crop_panels.py --reference to create reference/<name>.<ext>.
+#
+# `infer` blocks are optional; reproduce.py infer uses them to generate
+# samples from the released weights before rendering.
+
+version: 1
+
+panels:
+
+  fig2a:
+    kind: panel
+    canvas_mm: [180.0, 255.0]
+    title: "Fig. 2a - atmospheric forcing and target discretisations"
+    script: panels/fig2a.py
+    dpi: 300
+    crops:
+      - name: fig2a
+        bbox_mm: [0.0, 0.0, 108.0, 61.0]
+        reference_source: output/plot/figure2/figure2_draft.png
+        reference_dpi: 300
+    requires:
+      model_assets: true
+      figure_data: [era5_1970, ai025_mask]
+      gt: []
+
+  fig3def:
+    kind: panel
+    canvas_mm: [180.0, 189.0]
+    title: "Fig. 3d,e,f - fixed patch partitions and patch-boundary fields"
+    script: panels/fig3def.py
+    dpi: 300
+    crops:
+      - name: fig3d
+        bbox_mm: [0.0, 73.0, 48.0, 109.0]
+        reference_source: output/plot/figure3/figure3_draft.png
+        reference_dpi: 300
+      - name: fig3e
+        bbox_mm: [47.0, 73.0, 180.0, 108.5]
+        reference_source: output/plot/figure3/figure3_draft.png
+        reference_dpi: 300
+      - name: fig3f
+        bbox_mm: [0.0, 108.0, 78.0, 188.0]
+        reference_source: output/plot/figure3/figure3_draft.png
+        reference_dpi: 300
+    requires:
+      model_assets: true
+      figure_data: [global_samples_20220924T00, ocean_boundary]
+      gt: []
+    infer:
+      model: global_hs
+      config: configs/release/global_hs.yaml
+      weights: weights/waveflow-global-hs-ep99.pt
+      region: global_hs
+      timestamps: ["20220924T00"]
+      members: 10
+      sample_split: test
+      atm_source: era5
+      batch_size: 16
+      steps: 50
+      data_dir: data/global_hindcast/case_stubs/npy_files
+      workdir: output/repro/fig3f
+      samples_arg: "--samples-dir"
+
+  fig5ghi:
+    kind: panel
+    canvas_mm: [180.0, 200.0]
+    title: "Fig. 5g,h,i - hurricane case fields (reference requires hindcast)"
+    script: panels/fig5ghi.py
+    dpi: 300
+    crops:
+      - name: fig5g
+        bbox_mm: [0.0, 108.0, 176.0, 157.0]
+        reference_source: output/plot/figure5/figure5_main.png
+        reference_dpi: 300
+      - name: fig5h
+        bbox_mm: [0.0, 160.0, 176.0, 181.0]
+        reference_source: output/plot/figure5/figure5_main.png
+        reference_dpi: 300
+      - name: fig5i
+        bbox_mm: [0.0, 179.0, 176.0, 196.0]
+        reference_source: output/plot/figure5/figure5_main.png
+        reference_dpi: 300
+    requires:
+      model_assets: true
+      figure_data: [hk_case_samples_kompasu, global_case_samples_ian]
+      gt:
+        - data/hindcast/processed_npz/wave_20211013T00.npz
+        - data/global_hindcast/npz_files/2022/global_hindcast_20220928_12.npz
+
+  fig6:
+    kind: whole
+    title: "Fig. 6 - Ragasa 2025 overtopping hazard (complete figure)"
+    script: scripts/figures/figure6/plot_figure6_main.py
+    env:
+      FIG6_CASE: ragasa
+      CARTOPY_DATA_DIR: data/cartopy_cache
+    output: output/plot/figure6/figure6_main_ragasa.png
+    copy_to: fig6.png
+    reference_source: output/plot/figure6/figure6_main_ragasa.png
+    reference_dpi: 300
+    requires:
+      model_assets: true
+      figure_data: [fig6_assets, hk_case_samples_ragasa_peak, fig6_cache]
+      gt: []
+    infer:
+      model: hk
+      config: configs/release/hk_4var.yaml
+      weights: weights/waveflow-hk-4var-ep49.pt
+      region: hk
+      timestamps_range: {start: "20250923T00", end: "20250925T00", step_hours: 1}
+      members: 100
+      sample_split: train
+      train_max_year: 2025
+      atm_source: era5
+      batch_size: 32
+      steps: 50
+      data_dir: data/hindcast/case_ragasa_2025/processed_npz
+      workdir: output/repro/fig6
+      samples_env: WF_FIG6_SAMPLES_M100
+      overtopping:
+        script: scripts/compute_overtopping_saola.py
+        args: ["--case", "ragasa", "--which", "m100", "--crest-source", "hybridspot",
+               "--type-overrides", "data/hk_coastline/overtopping/coast_type_overrides.csv",
+               "--exclude-segs", "data/hk_coastline/overtopping/geometry_exclusions.csv"]
+        out_dir: output/repro/fig6/overtopping
+        q_env: WF_FIG6_Q_NPZ
+        q_m10_env: WF_FIG6_Q_NPZ_M10
+        summary_env: WF_FIG6_SUMMARY_CSV
+
+  ed2ab:
+    kind: panel
+    canvas_mm: [180.0, 113.0]
+    title: "Extended Data Fig. 2a,b - mesh spacing and global per-node RMSE"
+    script: panels/ed2ab.py
+    dpi: 600
+    crops:
+      - name: ed2a
+        bbox_mm: [0.0, 0.0, 60.0, 52.0]
+        reference_source: output/plot/figure_ed_mesh_coastal/figure_ed_mesh_coastal.png
+        reference_dpi: 600
+      - name: ed2b
+        bbox_mm: [60.0, 0.0, 116.0, 52.0]
+        reference_source: output/plot/figure_ed_mesh_coastal/figure_ed_mesh_coastal.png
+        reference_dpi: 600
+    requires:
+      model_assets: true
+      figure_data: [ed2_node_errors]
+      gt: []
+
+  ed3:
+    kind: whole
+    title: "Extended Data Fig. 3 - joint sea-state distributions"
+    script: scripts/figures/figure_ed_joint/plot_ed_pairs.py
+    output: output/plot/figure_ed_joint/figure_ed_pairs.png
+    copy_to: ed3.png
+    reference_source: output/plot/figure_ed_joint/figure_ed_pairs.png
+    reference_dpi: 600
+    requires:
+      model_assets: false
+      figure_data: [ed3_histograms]
+      gt: []
+
+  ed5:
+    kind: whole
+    title: "Extended Data Fig. 5 - four-variable fields on the HK mesh"
+    script: scripts/figures/figure_ed_fields_hk/plot_ed_fields_hk.py
+    output: output/plot/figure_ed_fields_hk/figure_ed_fields_hk.png
+    copy_to: ed5.png
+    reference_source: output/plot/figure_ed_fields_hk/figure_ed_fields_hk.png
+    reference_dpi: 300
+    requires:
+      model_assets: true
+      figure_data: [ed5_samples, hk_hs_timeseries]
+      gt:
+        - data/hindcast/processed_npz/wave_20220701T20.npz
+        - data/hindcast/processed_npz/wave_20210125T17.npz
+    infer:
+      model: hk
+      config: configs/release/hk_4var.yaml
+      weights: weights/waveflow-hk-4var-ep49.pt
+      region: hk
+      timestamps: ["20220701T20", "20210125T17"]
+      members: 10
+      sample_split: test
+      atm_source: era5
+      batch_size: 32
+      steps: 50
+      data_dir: data/hindcast/case_stubs/processed_npz
+      workdir: output/repro/ed5
+      samples_env: WF_HK_SAMPLES
+
+  ed6:
+    kind: whole
+    title: "Extended Data Fig. 6 - four-variable fields on the global mesh"
+    script: scripts/figures/figure_ed_fields_global/plot_ed_fields_global.py
+    output: output/plot/figure_ed_fields_global/figure_ed_fields_global.png
+    copy_to: ed6.png
+    reference_source: output/plot/figure_ed_fields_global/figure_ed_fields_global.png
+    reference_dpi: 300
+    requires:
+      model_assets: true
+      figure_data: [ed6_samples]
+      gt:
+        - data/global_hindcast/npy_files_daily_4var/2022/global_hindcast_20220924.npy
+        - data/global_hindcast/npy_files_daily_4var/2022/global_hindcast_20220115.npy
+    infer:
+      model: global_4var
+      config: configs/release/global_4var.yaml
+      weights: weights/waveflow-global-4var-ep199.pt
+      region: global_4var
+      timestamps: ["20220924T06", "20220115T15"]
+      members: 10
+      sample_split: test
+      atm_source: era5
+      batch_size: 2
+      steps: 50
+      data_dir: data/global_hindcast/case_stubs/npy_files_4var
+      workdir: output/repro/ed6
+      samples_env: WF_GLOBAL_4VAR_SAMPLES

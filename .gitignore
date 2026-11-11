@@ -1,0 +1,27 @@
+# Downloaded / generated data
+weights/
+downloads/
+reproduced/
+output/
+data/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+.ipynb_checkpoints/
+
+# OS / editor
+.DS_Store
+*.swp
+*.log
+
+# LaTeX build artefacts (if a paper copy is added)
+*.aux
+*.bbl
+*.blg
+*.fls
+*.fdb_latexmk
+*.out
+*.synctex.gz

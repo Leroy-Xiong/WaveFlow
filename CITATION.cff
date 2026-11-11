@@ -1,0 +1,25 @@
+cff-version: 1.2.0
+message: "If you use this code, weights or figure source data, please cite the paper and the Zenodo records below."
+title: "WaveFlow v1.0.0"
+version: "1.0.0"
+date-released: "2026-11-11"
+license: "MIT"
+repository-code: "https://github.com/Leroy-Xiong/WaveFlow"
+url: "https://github.com/Leroy-Xiong/WaveFlow"
+abstract: >-
+  WaveFlow is a conditional flow-matching model for probabilistic ocean-wave
+  and water-level prediction on unstructured meshes. This release contains the
+  model and training/sampling code, the three final checkpoints, the exact
+  configs, and the figure source data and scripts for the paper.
+authors:
+  - name: "WaveFlow authors"
+references:
+  - type: article
+    title: "WaveFlow enables high-resolution prediction of ocean waves and water levels for coastal hazard warning"
+    notes: "Manuscript in preparation; DOI to be added."
+  - type: dataset
+    title: "WaveFlow v1.0.0 trained weights"
+    doi: "10.5281/zenodo.24106732"
+  - type: dataset
+    title: "WaveFlow v1.0.0 figure source data"
+    doi: "10.5281/zenodo.24106732"

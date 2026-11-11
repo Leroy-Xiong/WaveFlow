@@ -1,0 +1,26 @@
+# Curated pip requirements (CUDA 12.8 torch build).
+# Prefer `conda env create -f environment.yml`; use this file only if you
+# cannot use conda. Install with:
+#   pip install -r requirements-pip.txt \
+#     --extra-index-url https://download.pytorch.org/whl/cu128
+numpy==2.4.0
+scipy==1.17.0
+pandas==2.3.3
+xarray==2025.12.0
+matplotlib==3.10.8
+cartopy==0.25.0
+shapely==2.1.2
+pyproj==3.7.2
+rasterio==1.5.1
+affine==3.0.1
+netCDF4==1.7.3
+h5py==3.15.1
+pyarrow==24.0.0
+pillow==12.0.0
+PyMuPDF==1.28.2
+PyYAML==6.0.3
+tqdm==4.67.1
+requests==2.32.5
+fonttools==4.61.1
+torch==2.9.1+cu128
+torchvision==0.24.1+cu128

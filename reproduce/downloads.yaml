@@ -1,0 +1,31 @@
+weights:
+  files:
+    hk_4var:
+      name: waveflow-hk-4var-ep49.pt
+      url: https://huggingface.co/tikitaka0345/WaveFlow/resolve/main/weights/waveflow-hk-4var-ep49.pt
+      sha256: 63bd1a4041b777016c9878bf51e2e4fa8c7ba553fa6adeb8375e12077d393239
+      size_bytes: 183111435
+    global_hs:
+      name: waveflow-global-hs-ep99.pt
+      url: https://huggingface.co/tikitaka0345/WaveFlow/resolve/main/weights/waveflow-global-hs-ep99.pt
+      sha256: fa60f851caf19fa6304cb4ee3fe52dbfa0f944c7dc1008beac9aaf78bfd55959
+      size_bytes: 1880960615
+    global_4var:
+      name: waveflow-global-4var-ep199.pt
+      url: https://huggingface.co/tikitaka0345/WaveFlow/resolve/main/weights/waveflow-global-4var-ep199.pt
+      sha256: cbcf0858743b5774102711f505dc4bd6e5a879fc3e098ec8247dc0bb23234b5a
+      size_bytes: 3883321617
+  assets:
+    url: https://huggingface.co/tikitaka0345/WaveFlow/resolve/main/assets.tar.gz
+    sha256: 4e82d28eb77415f951aeeb7a47f10e35f3d929eea47cd7a65fc551dad6d34b16
+    size_bytes: 22070652
+figure_data:
+  archive: waveflow-v1.0.0-figure-data.tar.gz
+  url: https://huggingface.co/tikitaka0345/WaveFlow/resolve/main/figure_data/waveflow-v1.0.0-figure-data.tar.gz
+  sha256: ad18db825d88496a6598ec61ad5283627c79739c53251885d72aa1f47e030b1f
+  size_bytes: 911532784
+forcing:
+  archive: waveflow-v1.0.0-global-forecast-forcing.tar.gz
+  url: ''
+  sha256: ''
+  size_bytes: 0

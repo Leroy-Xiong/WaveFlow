@@ -1,0 +1,41 @@
+# Licences
+
+## Code: MIT
+
+Copyright (c) 2026 WaveFlow authors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+## Weights: CC BY 4.0
+
+The three trained checkpoints (`weights/*.pt`) are released under the Creative
+Commons Attribution 4.0 International licence
+(https://creativecommons.org/licenses/by/4.0/). Attribution: cite the paper
+and the Zenodo weight record (see `CITATION.cff`).
+
+## Figure source data
+
+Derived statistics, model samples and open-government assets are provided under
+the same CC BY 4.0 terms to the extent the authors hold the rights. The
+underlying public datasets keep their own licences; see `THIRD_PARTY.md`.
+
+## Fonts
+
+The bundled TeX Gyre Heros OTFs are distributed under the GUST Font License;
+see `scripts/figures/fonts/GUST-FONT-LICENSE.txt`.
