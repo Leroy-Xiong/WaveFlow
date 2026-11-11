@@ -10,12 +10,12 @@ GenCast) plus optional tide phase, and generates calibrated ensembles at every
 mesh node.
 
 This repository contains the model, the three final checkpoints, the exact
-training/sampling configs, and the scripts and source data needed to rebuild
+training/sampling configs, and the scripts and reference panels used to rebuild
 the paper figures.
 
 - **Paper**: WaveFlow enables high-resolution prediction of ocean waves and water levels for coastal hazard warning
-- **Weights** (CC BY 4.0): [10.5281/zenodo.24106732](https://zenodo.org/records/24125637) · [Hugging Face](https://huggingface.co/tikitaka0345/WaveFlow)
-- **Figure source data**: [10.5281/zenodo.24106732](https://zenodo.org/records/24125637) · [Hugging Face](https://huggingface.co/tikitaka0345/WaveFlow)
+- **Weights** (CC BY 4.0): [10.5281/zenodo.24106732](https://zenodo.org/records/24127153) · [Hugging Face](https://huggingface.co/tikitaka0345/WaveFlow)
+- **Figure source data**: provided as Source Data with the paper (not hosted here)
 - **Code**: [https://github.com/Leroy-Xiong/WaveFlow](https://github.com/Leroy-Xiong/WaveFlow) · **Licence**: MIT (code), CC BY 4.0 (weights/data)
 
 ## Released models
@@ -135,18 +135,20 @@ bring your own copy (see `DATA.md`).
 ## Reproduce the paper figures
 
 Figure reproduction is one feature of this release, not its only purpose.
-The exact samples, derived statistics and reference crops are shipped, so the
-panels can be rebuilt on CPU without re-running inference:
+The samples and derived statistics behind the figures are provided as Source
+Data with the article and are not redistributed in this repository. If you have
+that archive, unpack it at the repository root, then:
 
 ```bash
-python reproduce.py setup --download   # weights + figure data (6.9 GB)
+python reproduce.py setup --weights
 python reproduce.py list
 python reproduce.py all                # panels that need no hindcast
 python reproduce.py verify             # pixel comparison against reference/
 ```
 
-Outputs land in `reproduced/`. The full panel map, hindcast requirements and
-GPU re-inference recipes are in `REPRODUCE.md`.
+Outputs land in `reproduced/`. Without the Source Data archive only the model
+inference and training paths are available. The full panel map, hindcast
+requirements and GPU re-inference recipes are in `REPRODUCE.md`.
 
 ## Repository layout
 
@@ -158,15 +160,15 @@ reproduce/           figure-reproduction CLI and panel renderers
 reference/           paper figures + exact panel crops used for verification
 scripts/             paper figure scripts and release overrides
 weights/             downloaded checkpoints (gitignored)
-data/, output/       downloaded assets/figure data (gitignored)
+data/, output/       downloaded assets / unpacked Source Data (gitignored)
 ```
 
 ## Data and licensing
 
 - Code: MIT (`LICENSE`).
 - Weights: CC BY 4.0 (see `LICENSES.md`).
-- Figure source data: CC BY 4.0; third-party assets retain their own terms
-  (`THIRD_PARTY.md`).
+- Figure source data: provided as Source Data with the paper; third-party
+  assets retain their own terms (`THIRD_PARTY.md`).
 - Hindcast targets: third-party, not redistributed (`DATA.md`).
 - ERA5, IFS/WeatherBench2, GenCast/GraphCast, CMEMS, HKO and LandsD sources are
   listed in `DATA.md` and `THIRD_PARTY.md`.

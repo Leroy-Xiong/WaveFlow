@@ -2,7 +2,7 @@
 
 Three final checkpoints are released under **CC BY 4.0**. The weight files are
 hosted on [Hugging Face](https://huggingface.co/tikitaka0345/WaveFlow); the [Zenodo
-record](https://zenodo.org/records/24125637) provides the DOI and the SHA256 checksums.
+record](https://zenodo.org/records/24127153) provides the DOI and the SHA256 checksums.
 
 | Name | Model | Params | Size | Epoch | Config |
 |---|---|---|---|---|---|

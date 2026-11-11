@@ -8,16 +8,18 @@ run from the repository root with the `waveflow` environment active.
 ```bash
 conda env create -f environment.yml
 conda activate waveflow
-python reproduce.py setup --download
+python reproduce.py setup --weights
 ```
 
-`setup` checks the environment, downloads the weight and figure-data archives
-from Zenodo, verifies their SHA256, extracts the figure data at the repository
-root, and reports which hindcast reference frames are present. Weights land in
-`weights/`, figure data restores the original `data/` and `output/` paths.
+`setup --weights` checks the environment, downloads the released checkpoints
+and model assets from Hugging Face, verifies their SHA256, and reports which
+hindcast reference frames are present. Weights land in `weights/`; the asset
+archive restores `data/` mesh assets.
 
-If you already have the archives, place them in `downloads/` and the extractor
-will verify and unpack them.
+The paper's figure source data are provided as **Source Data with the article**
+and are not downloaded by this command. Unpack that archive at the repository
+root to restore the original `data/` and `output/` paths used by the rendering
+commands.
 
 ### Cartopy coastlines
 
@@ -184,7 +186,7 @@ release acceptance test.
 |---|---|
 | `no URL configured ...` | the Zenodo record is not public yet; set the URLs in `reproduce/downloads.yaml` or use your local archive |
 | `BAD SHA256` | re-download; do not edit the archive |
-| `missing ... samples` | run `python reproduce.py setup --download` |
+| `missing ... samples` | unpack the Source Data archive from the paper at the repository root; `setup` does not download it |
 | `missing ... hindcast` | see §1 and `DATA.md`; set `WF_GT_*` |
 | map text differs from the paper | make sure `scripts/figures/fonts/` contains the four TeX Gyre Heros OTFs and matplotlib has a clean font cache (`rm -rf ~/.cache/matplotlib`) |
 | `cartopy` attempts to download data offline | pre-fetch Natural Earth/GSHHS (§0) |

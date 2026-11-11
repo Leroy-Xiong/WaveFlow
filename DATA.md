@@ -1,8 +1,9 @@
 # Data sources and access
 
-This release redistributes **code, trained weights, model assets, and derived
-figure source data**. It does **not** redistribute the hindcast targets. All
-other inputs are public or open government data.
+This release redistributes **code, trained weights and model assets**. It does
+**not** redistribute the hindcast targets or the figure source data; the latter
+are provided as Source Data with the paper. All other inputs are public or open
+government data.
 
 ## 1. Hindcast targets (not redistributed)
 
@@ -56,11 +57,15 @@ regenerated with `scripts/download_era5_*.py` / the scripts in
 
 The derived overtopping products (`data/hk_coastline/overtopping/*`) and the
 segment table were produced by the authors from these open datasets; per-file
-provenance is listed in `THIRD_PARTY.md` and in the figure-data manifest.
+provenance is listed in `THIRD_PARTY.md` and in the Source Data manifest.
 
 ## 4. What each panel needs
 
-| Panel | Shipped inputs | User-supplied |
+The inputs below describe the **Source Data archive provided with the paper**.
+They are not downloaded by this repository; unpack that archive at the
+repository root to use the figure-rendering commands.
+
+| Panel | Source Data inputs | User-supplied |
 |---|---|---|
 | Fig. 2a | mesh coordinates, ERA5 1970 frame, AI ocean mask, GSHHS | – |
 | Fig. 3d,e,f | coordinates, clusters, 10 global samples (2022-09-24 00Z), ocean geometry | – |
@@ -75,11 +80,12 @@ provenance is listed in `THIRD_PARTY.md` and in the figure-data manifest.
 
 ## 5. Checksums and manifests
 
-The weight files and the figure-data archive are hosted on
-[Hugging Face](https://huggingface.co/tikitaka0345/WaveFlow); the [Zenodo
-record](https://zenodo.org/records/24125637) carries the DOI and the per-file checksums.
+The weight files are hosted on [Hugging Face](https://huggingface.co/tikitaka0345/WaveFlow); the
+[Zenodo record](https://zenodo.org/records/24127153) carries the DOI and the per-file checksums.
+The figure source data are provided as Source Data with the paper and are not
+hosted here.
 
 - `weights/MANIFEST.json`: per-weight SHA256, parameter count, source run.
 - `reproduce/downloads.yaml`: archive URLs and SHA256.
-- The figure-data archive contains `FIGURE_DATA_MANIFEST.json` with per-file
-  SHA256, size, source and license.
+- The Source Data archive contains its own manifest with per-file SHA256,
+  size, source and license; it is not part of this repository.

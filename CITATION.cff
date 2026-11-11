@@ -16,10 +16,7 @@ authors:
 references:
   - type: article
     title: "WaveFlow enables high-resolution prediction of ocean waves and water levels for coastal hazard warning"
-    notes: "Manuscript in preparation; DOI to be added."
+    notes: "Manuscript; DOI to be added."
   - type: dataset
     title: "WaveFlow v1.0.0 trained weights"
-    doi: "10.5281/zenodo.24106732"
-  - type: dataset
-    title: "WaveFlow v1.0.0 figure source data"
     doi: "10.5281/zenodo.24106732"

@@ -18,8 +18,8 @@ redistributable; requests should be directed to TODO.
 
 WaveFlow code, training and sampling configs, the trained weights and the
 derived figure source data are available at https://github.com/Leroy-Xiong/WaveFlow (code: MIT licence;
-weights and derived data: CC BY 4.0), with the large files mirrored at
-https://huggingface.co/tikitaka0345/WaveFlow. The dataset record is 10.5281/zenodo.24106732 (figure source data:
-10.5281/zenodo.24106732). The release reproduces the panels listed in its README;
-hindcast-dependent reference fields require the third-party hindcast described
-above.
+weights: CC BY 4.0), with the model weights mirrored at https://huggingface.co/tikitaka0345/WaveFlow and
+the dataset record at 10.5281/zenodo.24106732. The figure source data are provided as
+Source Data with the paper and are not part of the public repository. The
+release reproduces the panels listed in its README; hindcast-dependent
+reference fields require the third-party hindcast described above.

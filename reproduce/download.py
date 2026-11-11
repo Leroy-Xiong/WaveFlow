@@ -1,16 +1,15 @@
 #!/usr/bin/env python
-"""Download the released weights and figure-source-data archives.
+"""Download the released weights and model assets.
 
 URLs, sizes and SHA256 checksums come from ``reproduce/downloads.yaml`` (written
 when the Zenodo records are published). Downloads are resumable and verified.
 
     python download.py --weights
-    python download.py --figure-data
-    python download.py --all
     python download.py --forcing          # optional global IFS-ENS case forcing
 
-Weights land in ``weights/``; the asset/figure archives are extracted at the
-repository root, restoring the exact paths the paper scripts expect.
+Weights land in ``weights/``; the asset archive is extracted at the repository
+root. The paper's figure source data are provided as Source Data with the
+article and are not downloaded here.
 """
 from __future__ import annotations
 
@@ -173,9 +172,10 @@ def get_weights(dl):
 
 
 def get_figure_data(dl):
-    spec = dl.get("figure_data") or {}
-    if not spec.get("url"):
-        raise SystemExit("downloads.yaml has no figure_data URL yet")
+    raise SystemExit(
+        "figure source data are not distributed with this release; they are "
+        "provided as Source Data with the paper. Unpack that archive at the "
+        "repository root to use the figure-rendering commands.")
     arch = ARCHIVE_DIR / spec.get("archive", "waveflow-v1.0.0-figure-data.tar.gz")
     download(spec["url"], arch, spec.get("sha256", ""),
              int(spec.get("size_bytes", 0) or 0))
@@ -213,7 +213,7 @@ def main(argv=None):
     ARCHIVE_DIR.mkdir(parents=True, exist_ok=True)
     if args.weights or args.all:
         get_weights(dl)
-    if args.figure_data or args.all:
+    if args.figure_data:
         get_figure_data(dl)
     if args.all:
         if dl.get("forcing", {}).get("url"):
