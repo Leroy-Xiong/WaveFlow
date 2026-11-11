@@ -90,7 +90,7 @@ def fig2a():
     panels = [(coords_025, 26, "0.25° grid (AI wave model)"),
               (coords_0083, 7, "0.083° grid (numerical wave model)"),
               (coords_global_hk, 7, "Global unstructured mesh (ours)"),
-              (coords_hk, 0.8, "HK unstructured mesh (ours)")]
+              (coords_hk, 0.3, "HK unstructured mesh (ours)")]
     for i, (coords, s, title) in enumerate(panels):
         ax = fig.add_subplot(gs[i // 2, 1 + i % 2], projection=ccrs.PlateCarree())
         ax.set_extent([min_lon, max_lon, min_lat, max_lat],
@@ -132,9 +132,9 @@ def fig3d():
     ax = fig.add_subplot(111, projection=ccrs.PlateCarree())
     ax.set_extent(list(HK_REGION), crs=ccrs.PlateCarree())
     F.add_gray_land(ax, list(HK_REGION), "10m")
-    ax.scatter(nodes[:, 0], nodes[:, 1], s=2.0, c=rgb, linewidths=0,
+    ax.scatter(nodes[:, 0], nodes[:, 1], s=3.2, c=rgb, linewidths=0,
                transform=ccrs.PlateCarree(), zorder=5)
-    ax.scatter(centers[:, 0], centers[:, 1], s=2.0, c="black", linewidths=0,
+    ax.scatter(centers[:, 0], centers[:, 1], s=3.8, c="black", linewidths=0,
                transform=ccrs.PlateCarree(), zorder=6)
     ax.set_title("Fig. 3d: Hong Kong mesh patches (512 patches)", fontsize=10)
     return fig
@@ -157,9 +157,9 @@ def fig3e():
         ax.add_geometries([g_coast], ccrs.PlateCarree(), facecolor="none",
                           edgecolor="0.35", linewidth=0.4, zorder=4)
         ax.gridlines(lw=0.3, color="grey", alpha=0.6)
-        ax.scatter(lon, lat, s=0.15, c=rgb, linewidths=0, zorder=3,
+        ax.scatter(lon, lat, s=0.35, c=rgb, linewidths=0, zorder=3,
                    rasterized=True, transform=ccrs.PlateCarree())
-        ax.scatter(centers[:, 0], centers[:, 1], s=0.8, c="black",
+        ax.scatter(centers[:, 0], centers[:, 1], s=1.5, c="black",
                    linewidths=0, zorder=6, rasterized=True,
                    transform=ccrs.PlateCarree())
         ax.set_title(["W. N. Pacific", "Caribbean Sea", "Bay of Bengal",
@@ -202,9 +202,9 @@ def fig3f():
 
         ax = axes[row, 0]
         base(ax)
-        ax.scatter(lon[m], lat[m], s=1.0, c=rgb[m], linewidths=0,
+        ax.scatter(lon[m], lat[m], s=2.2, c=rgb[m], linewidths=0,
                    rasterized=True, transform=ccrs.PlateCarree())
-        ax.scatter(centers[:, 0], centers[:, 1], s=1.2, c="black",
+        ax.scatter(centers[:, 0], centers[:, 1], s=2.4, c="black",
                    linewidths=0, transform=ccrs.PlateCarree())
         ax.add_geometries([g_coast], ccrs.PlateCarree(), facecolor="none",
                           edgecolor="black", linewidth=0.5, zorder=5)
@@ -212,7 +212,7 @@ def fig3f():
 
         ax = axes[row, 1]
         base(ax)
-        ax.scatter(lon[m], lat[m], c=bc_hs[m], s=1.0, cmap=F.HS_CMAP,
+        ax.scatter(lon[m], lat[m], c=bc_hs[m], s=2.2, cmap=F.HS_CMAP,
                    vmin=vmin, vmax=vmax, edgecolors="none", rasterized=True,
                    transform=ccrs.PlateCarree())
         ax.add_geometries([g_coast], ccrs.PlateCarree(), facecolor="none",
