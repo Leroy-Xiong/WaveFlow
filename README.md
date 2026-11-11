@@ -56,9 +56,9 @@ coordinates, clusters, statistics and ocean boundary under `data/`.
 ### 3. Run an ensemble
 
 Open [`notebooks/waveflow_reproduce.ipynb`](notebooks/waveflow_reproduce.ipynb):
-it downloads the released weights and ERA5 case forcing, reproduces the public
-paper panel (Fig. 3f), and lists which panels need the paper data tree or the
-third-party hindcast.
+it fetches the case forcing and renders the released paper panels from the
+paper data tree (the preview shows all 13 panels from the executed run). When
+the data tree is absent it falls back to the public Fig. 3f inference example.
 
 For your own inputs, call the sampler directly. The pattern for the Hong Kong
 model is:
