@@ -244,51 +244,6 @@ def fig3f():
     return fig
 
 
-def _ed2():
-    sys.path.insert(0, str(REPO / "scripts/figures/figure_ed_mesh_coastal"))
-    import plot_ed_mesh_coastal as M
-    return M
-
-
-def ed2a():
-    M = _ed2()
-    mesh_rows, hk_rows, _hk_share, g_rows, _h_rows = M.load()
-    fig, ax = plt.subplots(figsize=(5.6, 4.2))
-    M.draw_mesh_spacing(ax, mesh_rows, hk_rows)
-    M.tidy(ax)
-    ax.set_title("ED Fig. 2a: mesh spacing", fontsize=10)
-    fig.tight_layout()
-    return fig
-
-
-def ed2b():
-    M = _ed2()
-    _mesh_rows, _hk_rows, _hk_share, g_rows, _h_rows = M.load()
-    fig, ax = plt.subplots(figsize=(6.0, 4.2))
-    M.draw_rmse(ax, g_rows, M.MODELS, with_legend="lower right")
-    M.tidy(ax)
-    ax.set_title("ED Fig. 2b: global per-node RMSE", fontsize=10)
-    fig.tight_layout()
-    return fig
-
-
-def _fig5_modules():
-    sys.path.insert(0, str(REPO / "scripts/figures/figure5"))
-    sys.path.insert(0, str(REPO / "reproduce/panels"))
-    import fig5ghi
-    import plot_figure5_case as CASE
-    import plot_figure5_global as GLOB
-    return fig5ghi, CASE, GLOB
-
-
-def _fig5_data(CASE, GLOB):
-    hk = np.load(REPO / CASE.COORDS)
-    gc = np.load(REPO / GLOB.COORDS)
-    gt_hk = CASE.gt_hs(CASE.T_MAP)
-    gt_global = GLOB.gt_hs("20220928T12")
-    return hk, gc, gt_hk, gt_global
-
-
 def fig5g():
     F, CASE, GLOB = _fig5_modules()
     hk = np.load(REPO / CASE.COORDS)

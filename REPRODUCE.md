@@ -45,7 +45,6 @@ reproduction (see §6 for tolerances).
 | `python reproduce.py fig2a` | `reproduced/fig2a.png` | mesh coordinates, one ERA5 frame, static AI ocean mask, GSHHS | ~30 s |
 | `python reproduce.py fig3def` | `fig3d.png`, `fig3e.png`, `fig3f.png` | HK/global coordinates + clusters, 10 global samples (2022-09-24 00Z) | ~30 s |
 | `python reproduce.py fig6` | `fig6.png` | Ragasa overtopping products (analysis + forecast overlay), 100 peak-hour samples, node cache, coastline/orthophoto/DTM assets | 2–5 min |
-| `python reproduce.py ed2ab` | `ed2a.png`, `ed2b.png` | per-node squared-error arrays for four products | ~20 s |
 | `python reproduce.py ed3` | `ed3.png` | six pairwise 2D histograms, HK + global | ~20 s |
 | `python reproduce.py fig5ghi` | `fig5g.png`, `fig5h.png`, `fig5i.png` | shipped case samples + **2 hindcast frames** | ~30 s |
 | `python reproduce.py ed5` | `ed5.png` | shipped 2×10 HK samples + **2 hindcast frames** | ~30 s |
@@ -153,11 +152,8 @@ forecast forcing (public):
 
 ## 3. Recomputing the derived statistics (not required)
 
-Extended Data Figs. 2 and 3 are reproduced from released statistics:
+Extended Data Fig. 3 is reproduced from released statistics:
 
-- ED 2: per-node squared-error arrays produced by
-  `scripts/figures/figure_si_coastal/compute_hk_node_rmse.py` and
-  `compute_global_vit_rmse.py`, plus the corresponding baseline errors.
 - ED 3: 2D histograms produced by
   `scripts/figures/figure_ed_joint/compute_joint_full.py` (full test set:
   17,519 hourly HK fields; 5,840 global snapshots).

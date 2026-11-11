@@ -71,8 +71,6 @@ provenance is listed in `THIRD_PARTY.md`.
 | Fig. 5g | 4 lead × 10 HK samples (bc2) | Kompasu GT frame |
 | Fig. 5h,i | 4 lead × 10 global samples | Ian GT frame |
 | Fig. 6 | q products (analysis + forecast overlay), segments, HKO records, orthophoto/DTM caches, 100 peak samples, forecast samples | – |
-| ED 2a | mesh coordinates, coastlines | – |
-| ED 2b | four per-node squared-error arrays | – |
 | ED 3 | six pairwise 2D histograms (HK/global) | – |
 | ED 5 | 2×10 HK samples, HK Hs time-series CSV | 2 HK GT frames |
 | ED 6 | 2×10 global four-variable samples | 2 global daily GT packs |

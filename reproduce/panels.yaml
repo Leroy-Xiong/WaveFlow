@@ -135,26 +135,6 @@ panels:
         q_m10_env: WF_FIG6_Q_NPZ_M10
         summary_env: WF_FIG6_SUMMARY_CSV
 
-  ed2ab:
-    kind: panel
-    canvas_mm: [180.0, 113.0]
-    title: "Extended Data Fig. 2a,b - mesh spacing and global per-node RMSE"
-    script: panels/ed2ab.py
-    dpi: 600
-    crops:
-      - name: ed2a
-        bbox_mm: [0.0, 0.0, 60.0, 52.0]
-        reference_source: output/plot/figure_ed_mesh_coastal/figure_ed_mesh_coastal.png
-        reference_dpi: 600
-      - name: ed2b
-        bbox_mm: [60.0, 0.0, 116.0, 52.0]
-        reference_source: output/plot/figure_ed_mesh_coastal/figure_ed_mesh_coastal.png
-        reference_dpi: 600
-    requires:
-      model_assets: true
-      figure_data: [ed2_node_errors]
-      gt: []
-
   ed3:
     kind: whole
     title: "Extended Data Fig. 3 - joint sea-state distributions"
