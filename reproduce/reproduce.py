@@ -147,7 +147,9 @@ def cmd_setup(args):
                              (["--infer"] if args.infer else []))
     if args.download or args.weights or args.figure_data:
         cmd = [sys.executable, str(HERE / "download.py")]
-        if args.download or args.weights:
+        if args.download:
+            cmd.append("--all")
+        elif args.weights:
             cmd.append("--weights")
         elif args.figure_data:
             cmd.append("--figure-data")

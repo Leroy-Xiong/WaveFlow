@@ -25,7 +25,7 @@ figure_data:
   sha256: ad18db825d88496a6598ec61ad5283627c79739c53251885d72aa1f47e030b1f
   size_bytes: 911532784
 forcing:
-  archive: waveflow-v1.0.0-global-forecast-forcing.tar.gz
-  url: ''
-  sha256: ''
-  size_bytes: 0
+  archive: waveflow-v1.0.0-era5-cases.tar.gz
+  url: https://huggingface.co/tikitaka0345/WaveFlow/resolve/main/forcing/waveflow-v1.0.0-era5-cases.tar.gz
+  sha256: 00e3e926cd99857459c8ea43e29afe18e23152d12045327a90d36af29e69eff2
+  size_bytes: 226325755

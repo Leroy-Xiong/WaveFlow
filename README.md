@@ -82,17 +82,9 @@ torchrun --nproc_per_node=1 main.py --mode sample \
   -o work_dir.path=output/my_hk_run
 ```
 
-For forecast forcing, fetch IFS ENS members from WeatherBench2 or ECMWF open
-data and export them under
-
-```
-{ens_dir}/lead_time_<L>h/<YYYY>/ifs_ens_m<MM>_<init>.nc
-{ens_dir}/lead_time_<L>h/<YYYY>/ifs_ens_<init>.nc      # ensemble mean
-```
-
-then add `-o sampling.atm_source=ens -o sampling.ens_dir=/path/to/ifs/ens`
-(and `-o sampling.atm_members=<N>` for per-member files). See `DATA.md` and
-`TRAINING.md` for the WeatherBench2 paths.
+`python reproduce.py setup --download` also fetches the released ERA5 case
+forcing, the small slices used by the inference recipes, so the examples run
+without manual data preparation.
 
 Samples are written to
 `output/my_hk_run/samples/sample_<timestamp>_ens<NNN>.npz` under the key
@@ -139,11 +131,12 @@ bring your own copy (see `DATA.md`).
 ## Reproduce the paper figures
 
 Figure reproduction is one feature of this release, not its only purpose.
-The figure-rendering commands assume the data tree used by the paper scripts
-is present at the repository root. Then:
+A Jupyter walkthrough is provided in
+`notebooks/waveflow_reproduce.ipynb`. The rendering commands assume the data
+tree used by the paper scripts is present at the repository root. Then:
 
 ```bash
-python reproduce.py setup --weights
+python reproduce.py setup --download
 python reproduce.py list
 python reproduce.py all                # panels that need no hindcast
 python reproduce.py verify             # pixel comparison against reference/
