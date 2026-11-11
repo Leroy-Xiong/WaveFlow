@@ -56,9 +56,9 @@ coordinates, clusters, statistics and ocean boundary under `data/`.
 ### 3. Run an ensemble
 
 Open [`notebooks/waveflow_reproduce.ipynb`](notebooks/waveflow_reproduce.ipynb):
-it renders Fig. 2a from the public model assets and the other released panels
-from the paper data tree, displaying each panel immediately. Fig. 2a needs no
-figure-data download.
+it renders every panel as an independent figure, one at a time. Fig. 2a runs
+from the public model assets; the other panels need the paper data tree. No
+panel is cropped out of the original paper canvas.
 
 For your own inputs, call the sampler directly. The pattern for the Hong Kong
 model is:

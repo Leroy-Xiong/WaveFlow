@@ -233,9 +233,9 @@ CASE_SPECS = {
         # 单发布时次预报（panel d/e 橙/红叠加线）：GEFS 2024-09-26 00Z（登陆前
         # 27 h），31 成员，3-h 有效时刻 26T12..28T12（lead 12-60 h）。强迫树
         # data/ifs/ens_members_helene（fetch_gefs.py），样本树 = 全场 run 的
-        # 116 节点子集镜像（远端采样后回传）
+        # 116 节点子集镜像（remote 采样后 extract_subset_remote.py 回传）
         forecast_init="20240926T00",
-        forecast_samples="output/results/global/case_helene2024_fc_init20240926T00/test/samples_subset",
+        forecast_samples_dir="output/results/global/case_helene2024_fc_init20240926T00/test/samples_subset",
         forecast_npz=("data/us_coastline/helene/overtopping/"
                       "helene_q_forecast_init20240926T00.npz"),
         forecast_members=31,
@@ -317,8 +317,12 @@ SUBSET_MODE = os.environ.get("FIG6_SUBSET", "0") == "1"
 
 # ---- 预报（panel d/e 叠加）：单发布时次 IFS ENS 逐成员强迫 ----
 FORECAST_INIT = _SPEC.get("forecast_init")
-FORECAST_SAMPLES = (os.path.join(RUN, _SPEC["forecast_samples"], "test/samples")
-                    if _SPEC.get("forecast_samples") else None)
+# forecast_samples = RUN 下的相对目录名（ragasa 惯例，自动拼 test/samples）；
+# forecast_samples_dir = verbatim 路径（helene：远端镜像回来的子集树）
+FORECAST_SAMPLES = (_SPEC.get("forecast_samples_dir")
+                    or (os.path.join(RUN, _SPEC["forecast_samples"],
+                                     "test/samples")
+                        if _SPEC.get("forecast_samples") else None))
 FORECAST_NPZ = _SPEC.get("forecast_npz")
 FORECAST_LABEL = _SPEC.get("forecast_label", "")
 # 预报三色按 panel 分工（2026-11-10 作者反馈：紫色与蓝/红区分不开）：

@@ -110,3 +110,221 @@ def fig2a():
                           alpha=0.5)
     fig.suptitle("WaveFlow target discretisations", fontsize=11)
     return fig
+
+
+def _fig3def():
+    sys.path.insert(0, str(REPO / "reproduce/panels"))
+    import fig3def
+    return fig3def
+
+
+def fig3d():
+    F = _fig3def()
+    from modules.utils import HK_REGION
+    from modules.plot.global_ocean_boundary import get_global_ocean_geometry  # noqa: F401
+    coords = np.load(REPO / "data/hindcast/hk_coordinates.npy")
+    z = np.load(REPO / "data/hindcast/hk_clusters_512.npz")
+    labels = z["labels"]
+    centers = z["centers"][:, ::-1]
+    nodes = coords[:, ::-1].copy()
+    rgb = F.patch_color_map(labels, coords)
+    fig = plt.figure(figsize=(6.2, 4.6))
+    ax = fig.add_subplot(111, projection=ccrs.PlateCarree())
+    ax.set_extent(list(HK_REGION), crs=ccrs.PlateCarree())
+    F.add_gray_land(ax, list(HK_REGION), "10m")
+    ax.scatter(nodes[:, 0], nodes[:, 1], s=2.0, c=rgb, linewidths=0,
+               transform=ccrs.PlateCarree(), zorder=5)
+    ax.scatter(centers[:, 0], centers[:, 1], s=2.0, c="black", linewidths=0,
+               transform=ccrs.PlateCarree(), zorder=6)
+    ax.set_title("Fig. 3d: Hong Kong mesh patches (512 patches)", fontsize=10)
+    return fig
+
+
+def fig3e():
+    F = _fig3def()
+    from modules.plot.global_ocean_boundary import get_global_ocean_geometry
+    gc = np.load(REPO / "data/global_hindcast/global_coordinates.npy")
+    gz = np.load(REPO / "data/global_hindcast/global_clusters_2048.npz")
+    labels = gz["labels"]
+    centers = gz["centers"][:, ::-1]
+    lon, lat = gc[:, 1], gc[:, 0]
+    rgb = F.patch_color_map(labels, gc)
+    g_ocean, g_coast = get_global_ocean_geometry()
+    fig = plt.figure(figsize=(7.2, 7.2))
+    for i, (clon, clat) in enumerate(F.GLOBE_CENTERS):
+        ax = fig.add_subplot(2, 2, i + 1, projection=ccrs.Orthographic(clon, clat))
+        F.add_gray_land(ax, None, "110m", coastline=False)
+        ax.add_geometries([g_coast], ccrs.PlateCarree(), facecolor="none",
+                          edgecolor="0.35", linewidth=0.4, zorder=4)
+        ax.gridlines(lw=0.3, color="grey", alpha=0.6)
+        ax.scatter(lon, lat, s=0.15, c=rgb, linewidths=0, zorder=3,
+                   rasterized=True, transform=ccrs.PlateCarree())
+        ax.scatter(centers[:, 0], centers[:, 1], s=0.8, c="black",
+                   linewidths=0, zorder=6, rasterized=True,
+                   transform=ccrs.PlateCarree())
+        ax.set_title(["W. N. Pacific", "Caribbean Sea", "Bay of Bengal",
+                      "Arctic"][i], fontsize=9)
+    fig.suptitle("Fig. 3e: global mesh patches (2,048 patches)", fontsize=10)
+    fig.tight_layout(rect=(0, 0, 1, 0.95))
+    return fig
+
+
+def fig3f():
+    F = _fig3def()
+    from modules.plot.global_ocean_boundary import get_global_ocean_geometry
+    from scipy.interpolate import griddata
+    from scipy.spatial import cKDTree
+    from shapely import contains_xy
+    import matplotlib
+    samples_dir = os.environ.get(
+        "WF_GLOBAL_HS_SAMPLES",
+        "output/results/global/new_data_hs/"
+        "patch2048_4frames_concat_wucos_ema999gc_xpred_huge/"
+        "sample_epoch99_20260726_194530/samples")
+    bc_hs = F.load_global_samples(REPO / samples_dir)
+    gc = np.load(REPO / "data/global_hindcast/global_coordinates.npy")
+    gz = np.load(REPO / "data/global_hindcast/global_clusters_2048.npz")
+    labels = gz["labels"]
+    centers = gz["centers"][:, ::-1]
+    lon, lat = gc[:, 1], gc[:, 0]
+    rgb = F.patch_color_map(labels, gc)
+    g_ocean, g_coast = get_global_ocean_geometry()
+    fig, axes = plt.subplots(3, 3, figsize=(10.5, 9.0),
+                             subplot_kw={"projection": ccrs.PlateCarree()})
+    for row, (name, (l0, l1, b0, b1)) in enumerate(F.ZOOM_REGIONS):
+        m = (lon >= l0) & (lon <= l1) & (lat >= b0) & (lat <= b1)
+        vmin = float(np.floor(np.nanmin(bc_hs[m]) * 10) / 10)
+        vmax = float(np.ceil(np.nanmax(bc_hs[m]) * 10) / 10)
+
+        def base(ax):
+            ax.set_extent([l0, l1, b0, b1], crs=ccrs.PlateCarree())
+            F.add_gray_land(ax, (l0, l1, b0, b1), "50m", coastline=False)
+
+        ax = axes[row, 0]
+        base(ax)
+        ax.scatter(lon[m], lat[m], s=1.0, c=rgb[m], linewidths=0,
+                   rasterized=True, transform=ccrs.PlateCarree())
+        ax.scatter(centers[:, 0], centers[:, 1], s=1.2, c="black",
+                   linewidths=0, transform=ccrs.PlateCarree())
+        ax.add_geometries([g_coast], ccrs.PlateCarree(), facecolor="none",
+                          edgecolor="black", linewidth=0.5, zorder=5)
+        ax.set_title(f"{name}: patches", fontsize=8)
+
+        ax = axes[row, 1]
+        base(ax)
+        ax.scatter(lon[m], lat[m], c=bc_hs[m], s=1.0, cmap=F.HS_CMAP,
+                   vmin=vmin, vmax=vmax, edgecolors="none", rasterized=True,
+                   transform=ccrs.PlateCarree())
+        ax.add_geometries([g_coast], ccrs.PlateCarree(), facecolor="none",
+                          edgecolor="black", linewidth=0.5, zorder=4)
+        ax.set_title(f"{name}: Hs nodes", fontsize=8)
+
+        ax = axes[row, 2]
+        base(ax)
+        nx = 420
+        ny = max(2, int(round(nx * (b1 - b0) / (l1 - l0))))
+        GX, GY = np.meshgrid(np.linspace(l0, l1, nx), np.linspace(b0, b1, ny))
+        zi = griddata(np.column_stack([lon[m], lat[m]]), bc_hs[m],
+                      (GX, GY), method="linear")
+        zi[~contains_xy(g_ocean, GX.ravel(), GY.ravel()).reshape(GX.shape)] = np.nan
+        t = cKDTree(np.column_stack([lon[m], lat[m]]))
+        dd, _ = t.query(np.column_stack([GX.ravel(), GY.ravel()]))
+        zi[dd.reshape(GX.shape) > 2.5 * np.median(dd)] = np.nan
+        im = ax.imshow(zi, extent=[l0, l1, b0, b1], origin="lower",
+                       cmap=F.HS_CMAP, vmin=vmin, vmax=vmax,
+                       transform=ccrs.PlateCarree(), interpolation="bilinear")
+        ax.add_geometries([g_coast], ccrs.PlateCarree(), facecolor="none",
+                          edgecolor="black", linewidth=0.5, zorder=4)
+        ax.set_title(f"{name}: Hs interpolated", fontsize=8)
+        cb = fig.colorbar(im, ax=ax, fraction=0.046, pad=0.02,
+                          format=matplotlib.ticker.FormatStrFormatter("%.1f"))
+        cb.ax.tick_params(labelsize=6)
+    fig.suptitle("Fig. 3f: patch-boundary fields at 2022-09-24 00Z", fontsize=10)
+    fig.tight_layout(rect=(0, 0, 1, 0.96))
+    return fig
+
+
+def _ed2():
+    sys.path.insert(0, str(REPO / "scripts/figures/figure_ed_mesh_coastal"))
+    import plot_ed_mesh_coastal as M
+    return M
+
+
+def ed2a():
+    M = _ed2()
+    mesh_rows, hk_rows, _hk_share, g_rows, _h_rows = M.load()
+    fig, ax = plt.subplots(figsize=(5.6, 4.2))
+    M.draw_mesh_spacing(ax, mesh_rows, hk_rows)
+    M.tidy(ax)
+    ax.set_title("ED Fig. 2a: mesh spacing", fontsize=10)
+    fig.tight_layout()
+    return fig
+
+
+def ed2b():
+    M = _ed2()
+    _mesh_rows, _hk_rows, _hk_share, g_rows, _h_rows = M.load()
+    fig, ax = plt.subplots(figsize=(6.0, 4.2))
+    M.draw_rmse(ax, g_rows, M.MODELS, with_legend="lower right")
+    M.tidy(ax)
+    ax.set_title("ED Fig. 2b: global per-node RMSE", fontsize=10)
+    fig.tight_layout()
+    return fig
+
+
+def _fig5_modules():
+    sys.path.insert(0, str(REPO / "scripts/figures/figure5"))
+    sys.path.insert(0, str(REPO / "reproduce/panels"))
+    import fig5ghi
+    import plot_figure5_case as CASE
+    import plot_figure5_global as GLOB
+    return fig5ghi, CASE, GLOB
+
+
+def _fig5_data(CASE, GLOB):
+    hk = np.load(REPO / CASE.COORDS)
+    gc = np.load(REPO / GLOB.COORDS)
+    gt_hk = CASE.gt_hs(CASE.T_MAP)
+    gt_global = GLOB.gt_hs("20220928T12")
+    return hk, gc, gt_hk, gt_global
+
+
+def fig5g():
+    F, CASE, GLOB = _fig5_modules()
+    hk, _gc, gt_hk, _gtg = _fig5_data(CASE, GLOB)
+    fig = plt.figure(figsize=(180 / 25.4, 72 / 25.4))
+    CASE.draw_mean_map_row(fig, hk[:, 1], hk[:, 0], gt_hk, x0=8.0, y_top=9.0,
+                           map_w=30.0, dx=32.5, canvas=(180.0, 72.0),
+                           left_labels=True, bottom_labels=False)
+    CASE.draw_prob_map_row(fig, hk[:, 1], hk[:, 0], gt_hk, x0=8.0, y_top=40.0,
+                           map_w=30.0, dx=32.5, canvas=(180.0, 72.0))
+    fig.suptitle("Fig. 5g: Hong Kong Kompasu case (reference + 4 leads)",
+                 fontsize=9, y=0.995)
+    return fig
+
+
+def fig5h():
+    F, CASE, GLOB = _fig5_modules()
+    _hk, gc, _gth, gt_global = _fig5_data(CASE, GLOB)
+    fig = plt.figure(figsize=(180 / 25.4, 32 / 25.4))
+    GLOB.draw_global_mean_row(fig, gc[:, 1], gc[:, 0], gt_global,
+                              x0=8.0, y_top=9.0, map_w=30.0, dx=32.5,
+                              canvas=(180.0, 32.0), rmse=None,
+                              show_rmse=False, ts="20220928T12",
+                              tmpls=F.CASE_TMPL)
+    fig.suptitle("Fig. 5h: global Hurricane Ian case (reference + 4 leads)",
+                 fontsize=9, y=0.99)
+    return fig
+
+
+def fig5i():
+    F, CASE, GLOB = _fig5_modules()
+    _hk, gc, _gth, gt_global = _fig5_data(CASE, GLOB)
+    fig = plt.figure(figsize=(180 / 25.4, 32 / 25.4))
+    GLOB.draw_zoom_row(fig, gc[:, 1], gc[:, 0], gt_global, x0=8.0,
+                       y_top=9.0, map_w=30.0, dx=32.5, canvas=(180.0, 32.0),
+                       ts="20220928T12", tmpls=F.CASE_TMPL,
+                       region=F.CASE_ZOOM, dot_s=0.6)
+    fig.suptitle("Fig. 5i: Hurricane Ian zoom (reference + 4 leads)",
+                 fontsize=9, y=0.99)
+    return fig
