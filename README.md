@@ -78,7 +78,7 @@ torchrun --nproc_per_node=1 main.py --mode sample \
   -o work_dir.path=output/my_hk_run
 ```
 
-`python reproduce.py setup --download` also fetches the released ERA5 case
+`python reproduce.py setup --download` also fetches the released ERA5/IFS ENS case
 forcing, the small slices used by the inference recipes, so the examples run
 without manual data preparation.
 
