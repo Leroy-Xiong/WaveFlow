@@ -16,11 +16,8 @@ Files: `data/era5/npz_files/...`, `data/era5/global_npy_files_preinterpolated_da
 
 IFS ENS forecast fields are derived from ECMWF open data and the
 WeatherBench2 archive. Attribution: ECMWF, WeatherBench2 (Rasp et al. 2024).
-Files: optional forcing archive only (the paper figures use the derived
-samples, which are the authors’ model output). GenCast AI forecasts, when used
-as forcing, are generated from the public GenCast/GraphCast weights and
-WeatherBench2 inputs; follow the GraphCast model licence and WeatherBench2
-terms.
+The forcing fields are not redistributed; download them from ECMWF open data
+or WeatherBench2 as described in `DATA.md`.
 
 ## CMEMS
 

@@ -4,10 +4,10 @@
 
 WaveFlow is a conditional flow-matching model for ensemble prediction of
 significant wave height, peak period, mean direction and water level on
-unstructured coastal/global meshes. It conditions on atmospheric fields
-(ERA5 reanalysis, IFS ensemble forecasts, or AI weather forecasts such as
-GenCast) plus optional tide phase, and generates calibrated ensembles at every
-mesh node.
+unstructured coastal/global meshes. It conditions on atmospheric fields, using
+ERA5 reanalysis for pretraining and IFS ensemble forecasts for operational
+prediction, plus optional tide phase, and generates calibrated ensembles at
+every mesh node.
 
 This repository contains the model, the three final checkpoints, the exact
 training/sampling configs, and the scripts and reference panels used to rebuild
@@ -82,11 +82,17 @@ torchrun --nproc_per_node=1 main.py --mode sample \
   -o work_dir.path=output/my_hk_run
 ```
 
-For AI forecast forcing, add
-`-o sampling.atm_source=gencast -o sampling.gencast_dir=/path/to/gencast_global`
-(and `-o sampling.atm_members=<N>` for per-member files). The loader expects
-`{gencast_dir}/lead_time_<L>h/<YYYY>/gencast_m<MM>_<init>.nc`; the export path
-and other AI forecast layouts are documented in `TRAINING.md`.
+For forecast forcing, fetch IFS ENS members from WeatherBench2 or ECMWF open
+data and export them under
+
+```
+{ens_dir}/lead_time_<L>h/<YYYY>/ifs_ens_m<MM>_<init>.nc
+{ens_dir}/lead_time_<L>h/<YYYY>/ifs_ens_<init>.nc      # ensemble mean
+```
+
+then add `-o sampling.atm_source=ens -o sampling.ens_dir=/path/to/ifs/ens`
+(and `-o sampling.atm_members=<N>` for per-member files). See `DATA.md` and
+`TRAINING.md` for the WeatherBench2 paths.
 
 Samples are written to
 `output/my_hk_run/samples/sample_<timestamp>_ens<NNN>.npz` under the key
@@ -165,8 +171,8 @@ data/, output/       downloaded assets / paper data tree (gitignored)
 - Code: MIT (`LICENSE`).
 - Weights: CC BY 4.0 (see `LICENSES.md`).
 - Hindcast targets: third-party, not redistributed (`DATA.md`).
-- ERA5, IFS/WeatherBench2, GenCast/GraphCast, CMEMS, HKO and LandsD sources are
-  listed in `DATA.md` and `THIRD_PARTY.md`.
+- ERA5, IFS/WeatherBench2, CMEMS, HKO and LandsD sources are listed in
+  `DATA.md` and `THIRD_PARTY.md`.
 
 ## Citation
 

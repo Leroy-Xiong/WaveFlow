@@ -247,8 +247,8 @@ class TrainerConfigMixin:
         self.ensemble_size = int(config['sampling'].get('ensemble_size', 1))  # Number of samples per condition for empirical distribution
         self.resume_sample_path = config['sampling'].get('resume_sample_path', None)  # Path to resume sampling from
         self.use_ema_for_sampling = config['sampling'].get('use_ema_for_sampling', True)  # Whether to use EMA for sampling
-        self.atm_source = config['sampling'].get('atm_source', 'era5')  # 'era5', 'ens', or 'gencast'
-        self.ens_lead_time = int(config['sampling'].get('ens_lead_time', 24))  # ENS/GenCast lead time in hours
+        self.atm_source = config['sampling'].get('atm_source', 'era5')  # 'era5' or 'ens'
+        self.ens_lead_time = int(config['sampling'].get('ens_lead_time', 24))  # IFS ENS lead time in hours
         self.ens_dir = config['sampling'].get('ens_dir', './data/ifs/ens')  # ENS data directory
         # Optional fixed forecast issue time ('YYYYMMDDTHH'): when set, every target
         # valid time uses the SAME init (lead = valid - init varies per timestamp),
@@ -264,10 +264,10 @@ class TrainerConfigMixin:
                 raise ValueError(
                     f"sampling.ens_init must look like '20250922T12', got "
                     f"{self.ens_init!r}") from exc
-        self.gencast_dir = config['sampling'].get('gencast_dir', './data/gencast_global')  # GenCast data directory
+        self.gencast_dir = None  # GenCast is not part of this release
         # Member-forced ensemble sampling: generative sample k is conditioned on
         # atmospheric forecast member k (1:1 pairing) instead of all samples
-        # sharing the ens-mean condition. Requires atm_source='ens'/'gencast' and
+        # sharing the ens-mean condition. Requires atm_source='ens' and
         # per-member forcing files (atm_members=ensemble_size on the dataset).
         self.member_forced = bool(config['sampling'].get('member_forced', False))
         # Number of atmospheric forcing members ON DISK. Defaults to ensemble_size
@@ -277,7 +277,7 @@ class TrainerConfigMixin:
         _am = config['sampling'].get('atm_members', None)
         self.atm_members = (int(_am) if _am not in (None, '', 0) else None)
         if self.member_forced and self.atm_source == 'era5':
-            raise ValueError("sampling.member_forced requires sampling.atm_source='ens' or 'gencast'")
+            raise ValueError("sampling.member_forced requires sampling.atm_source='ens'")
         # Only sample these timestamps (e.g. ['20210101T00', ...]); None/empty = sample all.
         # Accepts a yaml list or a comma-separated string (for -o overrides).
         self.target_timestamps = self._parse_str_list(config['sampling'].get('target_timestamps', None))

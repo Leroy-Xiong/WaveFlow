@@ -1,11 +1,10 @@
 ## Data availability (draft for the manuscript)
 
-The ERA5 reanalysis used for atmospheric forcing is available from the
-Copernicus Climate Change Service (https://cds.climate.copernicus.eu). The IFS
-ENS and HRES forecast fields are available from ECMWF open data
-(https://data.ecmwf.int/forecasts/) and the WeatherBench2 archive; GenCast AI
-forecast fields can be generated from the public GraphCast/GenCast weights and
-WeatherBench2 initial conditions. The CMEMS L3
+The ERA5 reanalysis used for pretraining and reanalysis-forced cases is
+available from the Copernicus Climate Change Service
+(https://cds.climate.copernicus.eu) and the WeatherBench2 archive. The IFS ENS
+forecast fields used for operational prediction are available from ECMWF open
+data (https://data.ecmwf.int/forecasts/) and WeatherBench2. The CMEMS L3
 along-track significant wave height is available from the Copernicus Marine
 Service (product WAVE_GLO_PHY_SWH_L3_NRT_014_001). Tide-gauge records and
 flooding reports are available from the Hong Kong Observatory and the IOC Sea

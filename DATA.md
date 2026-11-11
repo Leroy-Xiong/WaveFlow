@@ -35,13 +35,17 @@ test) follows the paper’s Methods.
 |---|---|---|---|
 | ERA5 (0.25°, hourly, 4 surface variables) | training forcing; Fig. 2a schematic; inference forcing for 2021/2022/2025 cases | Copernicus Climate Data Store, https://cds.climate.copernicus.eu | Copernicus licence (attribution) |
 | IFS ENS / HRES (0.25°, 6-hourly, 50 members) | Fig. 5 forecast forcing | ECMWF open data https://data.ecmwf.int/forecasts/ and WeatherBench2 `gs://weatherbench2/datasets/ifs_ens/2018-2022-1440x721.zarr` | ECMWF licence (attribution) |
-| GenCast (0.25° ensemble) | comparison forcing in Fig. 5 | WeatherBench2 / GraphCast public weights | CC BY 4.0 (model) / WeatherBench2 terms |
 
-The release includes small ERA5 slices (a single 1970 frame, the Ragasa 2025
-window, two 2021/2022 case windows, four global pre-interpolated days) so the
-render and small inference recipes work offline. Full forcing can be
-regenerated with `scripts/download_era5_*.py` / the scripts in
-`scripts/live/` (not included) or the CDS API.
+Neither ERA5 nor IFS ENS is redistributed with this release.
+
+- **ERA5** is the pretraining and reanalysis forcing. Download it from the
+  Copernicus Climate Data Store or the WeatherBench2 ERA5 archive.
+- **IFS ENS** is the forecast forcing. Download it from WeatherBench2
+  (`gs://weatherbench2/datasets/ifs_ens/2018-2022-1440x721.zarr`) or ECMWF
+  open data, then export per-member NetCDF files under
+  `data/ifs/ens/lead_time_<L>h/<YYYY>/ifs_ens_m<MM>_<init>.nc`
+  (`ifs_ens_<init>.nc` for the ensemble mean) and point
+  `sampling.ens_dir` at that tree.
 
 ## 3. Observations and coastal assets (public / open government)
 

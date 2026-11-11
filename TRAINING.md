@@ -81,21 +81,21 @@ for faster I/O (see `modules/preprocess/convert_npy_to_daily.py` and
 | `data.use_preinterpolated_era5` | false | true (recommended) |
 | `data.era5_stats_file` | `era5_statistics.json` | `era5_statistics_global.json` |
 | `model.era5_num_frames` | 8 | 4 |
-| `sampling.atm_source` | `era5` / `ens` | `era5` / `ens` / `gencast` |
+| `sampling.atm_source` | `era5` / `ens` | `era5` / `ens` |
 
-`atm_source` selects `era5` (reanalysis), `ens` (IFS ensemble) or `gencast`
-(AI forecast). For GenCast, export per-member files with
-`modules/datasets/load_gencast.py` under
+`atm_source` selects `era5` (reanalysis, used for pretraining) or `ens` (IFS
+ensemble forecast). ERA5 is available from the Copernicus Climate Data Store
+and the WeatherBench2 archive. IFS ENS is available from WeatherBench2
+(`gs://weatherbench2/datasets/ifs_ens/2018-2022-1440x721.zarr`) or ECMWF open
+data; export per-member files under
 
 ```
-{gencast_dir}/lead_time_<L>h/<YYYY>/gencast_m<MM>_<init>.nc
-{gencast_dir}/lead_time_<L>h/<YYYY>/gencast_<init>.nc      # atm_members=1
+{ens_dir}/lead_time_<L>h/<YYYY>/ifs_ens_m<MM>_<init>.nc
+{ens_dir}/lead_time_<L>h/<YYYY>/ifs_ens_<init>.nc      # ensemble mean
 ```
 
-and set `sampling.atm_source=gencast`, `sampling.gencast_dir` and
-`sampling.atm_members`. Other AI forecast systems (Pangu, GraphCast, FuXi, …)
-can be used through the same interface once their fields are remapped to this
-per-member NetCDF layout; the model itself only sees the atmospheric tensor.
+and set `sampling.atm_source=ens`, `sampling.ens_dir` and
+`sampling.atm_members`.
 
 The ERA5/IFS frames must cover the history window of every target timestamp
 (`era5_num_frames` × 6 h). For the global models the pre-interpolated daily

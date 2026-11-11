@@ -83,7 +83,6 @@ sampling:
   atm_source: era5
   ens_lead_time: 24
   ens_dir: ./data/ifs/ens
-  gencast_dir: ./data/gencast_global
 checkpoint:
   resume_path: null
   resume_training: false

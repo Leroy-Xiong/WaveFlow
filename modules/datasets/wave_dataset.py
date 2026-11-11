@@ -149,8 +149,8 @@ class WaveDataset(Dataset):
 
         # ENS / GenCast forecast settings
         self.atm_source = atm_source.lower()
-        if self.atm_source not in ['era5', 'ens', 'gencast']:
-            raise ValueError(f"atm_source must be 'era5', 'ens', or 'gencast', got '{atm_source}'")
+        if self.atm_source not in ['era5', 'ens']:
+            raise ValueError(f"atm_source must be 'era5' or 'ens', got '{atm_source}'")
         self.ens_lead_time = ens_lead_time
         self.ens_dir = os.path.abspath(os.path.expanduser(ens_dir)) if ens_dir is not None else os.path.abspath('./data/ifs/ens')
         # Optional fixed issue time: one forecast cycle, lead derived per timestamp
@@ -164,7 +164,7 @@ class WaveDataset(Dataset):
         # serves member 0 and the sampler fetches each member explicitly.
         self.atm_members = int(atm_members)
         if self.atm_members > 1 and self.atm_source == 'era5':
-            raise ValueError("atm_members > 1 requires atm_source='ens' or 'gencast'")
+            raise ValueError("atm_members > 1 requires atm_source='ens'")
         self.atm_default_member = 0 if self.atm_members > 1 else None
         self.use_mmap = use_mmap
 
