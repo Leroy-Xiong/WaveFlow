@@ -66,7 +66,7 @@ provenance is listed in `THIRD_PARTY.md`.
 
 | Panel | Inputs | User-supplied |
 |---|---|---|
-| Fig. 2a | mesh coordinates, ERA5 1970 frame, AI ocean mask, GSHHS | – |
+| Fig. 2a | mesh coordinates, AI ocean mask, GSHHS | – |
 | Fig. 3d,e,f | coordinates, clusters, 10 global samples (2022-09-24 00Z), ocean geometry | – |
 | Fig. 5g | 4 lead × 10 HK samples (bc2) | Kompasu GT frame |
 | Fig. 5h,i | 4 lead × 10 global samples | Ian GT frame |

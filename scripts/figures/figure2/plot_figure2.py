@@ -471,9 +471,11 @@ def draw_panel_a(fig):
     # ERA5 grid points: read the actual coordinates from a real ERA5 NPZ
     # and apply the dataset's region-2 crop (left-closed, right-open),
     # so the dots match the model input exactly.
-    era5_npz = np.load("data/era5/npz_files/1970/era5_19700101T00.npz")
-    raw_lons = era5_npz["_longitude"]
-    raw_lats = era5_npz["_latitude"]
+    # Release override: the 0.25 deg ERA5 grid is regular; reconstruct its
+    # coordinates instead of requiring a 1970 ERA5 file. No field values from
+    # that file are used by this panel.
+    raw_lons = np.arange(0.0, 360.0, 0.25)
+    raw_lats = np.arange(90.0, -90.0 - 0.125, -0.25)
     e_lons = raw_lons[(raw_lons >= era5_lon[0]) & (raw_lons < era5_lon[1])]
     e_lats = raw_lats[(raw_lats >= era5_lat[0]) & (raw_lats < era5_lat[1])]
     e_lon_g, e_lat_g = np.meshgrid(e_lons, e_lats)

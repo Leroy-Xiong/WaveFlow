@@ -28,7 +28,7 @@ panels:
         reference_dpi: 300
     requires:
       model_assets: true
-      figure_data: [era5_1970, ai025_mask]
+      figure_data: []
       gt: []
 
   fig3def:
