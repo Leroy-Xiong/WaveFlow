@@ -58,7 +58,8 @@ coordinates, clusters, statistics and ocean boundary under `data/`.
 Open [`notebooks/waveflow_reproduce.ipynb`](notebooks/waveflow_reproduce.ipynb):
 it renders every panel as an independent figure, one at a time. Fig. 2a runs
 from the public model assets; the other panels need the paper data tree. No
-panel is cropped out of the original paper canvas.
+panel is cropped out of the original paper canvas. The notebook links 300 dpi
+PNGs under `notebooks/figures/`.
 
 For your own inputs, call the sampler directly. The pattern for the Hong Kong
 model is:
