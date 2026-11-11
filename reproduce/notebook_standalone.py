@@ -291,15 +291,56 @@ def _fig5_data(CASE, GLOB):
 
 def fig5g():
     F, CASE, GLOB = _fig5_modules()
-    hk, _gc, gt_hk, _gtg = _fig5_data(CASE, GLOB)
-    fig = plt.figure(figsize=(180 / 25.4, 72 / 25.4))
-    CASE.draw_mean_map_row(fig, hk[:, 1], hk[:, 0], gt_hk, x0=8.0, y_top=9.0,
-                           map_w=30.0, dx=32.5, canvas=(180.0, 72.0),
-                           left_labels=True, bottom_labels=False)
-    CASE.draw_prob_map_row(fig, hk[:, 1], hk[:, 0], gt_hk, x0=8.0, y_top=40.0,
-                           map_w=30.0, dx=32.5, canvas=(180.0, 72.0))
-    fig.suptitle("Fig. 5g: Hong Kong Kompasu case (reference + 4 leads)",
-                 fontsize=9, y=0.995)
+    hk = np.load(REPO / CASE.COORDS)
+    lons, lats = hk[:, 1], hk[:, 0]
+    gt = CASE.gt_hs(CASE.T_MAP)
+
+    W, H = 180.0, 292.0
+    fig = plt.figure(figsize=(W / 25.4, H / 25.4))
+    x_left, x_right, map_w = 22.0, 94.0, 58.0
+    map_h = map_w / 1.4286
+    y0, pitch = 15.0, 52.0
+
+    sc_mean = sc_prob = None
+    for i, lead in enumerate([0] + CASE.LEADS):
+        y = y0 + i * pitch
+        if lead == 0:
+            vals = gt
+            title = "Reference"
+        else:
+            e = CASE.ens_hs(CASE.case_sample_dir(lead), CASE.T_MAP)
+            vals = np.nanmean(e, axis=0)
+            title = f"{lead} h lead"
+        _ax, sc_mean = CASE.draw_map(
+            fig, x_left, y, map_w, map_h, vals, lons, lats, title,
+            0.0, CASE.HS_VMAX, "turbo", left_labels=True,
+            bottom_labels=(i == 4), canvas=(W, H))
+        if lead == 0:
+            fig.text(x_right + map_w / 2, 1 - (y + map_h / 2) / H,
+                     "P($H_s$>4 m)\n(12-72 h leads)", ha="center",
+                     va="center", fontsize=9, color="0.35")
+            continue
+        e = CASE.ens_hs(CASE.case_sample_dir(lead), CASE.T_MAP)
+        p = (e > CASE.EXCEED).mean(0).astype(np.float32)
+        axp, sc_prob = CASE.draw_map(
+            fig, x_right, y, map_w, map_h, p, lons, lats,
+            f"{lead} h lead  P($H_s$>{CASE.EXCEED:.0f} m)", 0.0, 1.0,
+            "viridis", left_labels=True, bottom_labels=(i == 4),
+            canvas=(W, H))
+        CASE.CASE4.add_gt_contour(axp, gt, lons, lats, level=CASE.EXCEED)
+
+    cax = fig.add_axes([0.16, 0.034, 0.30, 0.008])
+    cb = fig.colorbar(sc_mean, cax=cax, orientation="horizontal")
+    cb.set_label("$H_s$ (m)", fontsize=8, labelpad=4)
+    cb.ax.xaxis.set_label_position("top")
+    cb.ax.tick_params(labelsize=7)
+    cax = fig.add_axes([0.56, 0.034, 0.30, 0.008])
+    cb = fig.colorbar(sc_prob, cax=cax, orientation="horizontal")
+    cb.set_label("probability  $P(H_s>4$ m$)$", fontsize=8, labelpad=4)
+    cb.ax.xaxis.set_label_position("top")
+    cb.ax.tick_params(labelsize=7)
+    fig.suptitle("Fig. 5g: Hong Kong Kompasu case, vertical layout",
+                 fontsize=12, y=0.995)
     return fig
 
 
