@@ -89,11 +89,23 @@ def _run(spec: dict) -> list[Figure]:
         plt.close = _ORIG_CLOSE
 
 
+def _strip_panel_labels(fig: Figure):
+    """Remove the bold single-letter panel labels added by the paper scripts."""
+    for artist_list in [fig.texts] + [ax.texts for ax in fig.axes]:
+        for t in list(artist_list):
+            if (t.get_text().strip() in "abcdefgh"
+                    and abs(float(t.get_fontsize()) - 9.0) < 0.6
+                    and str(t.get_fontweight()) in ("bold", "700", "heavy")):
+                t.remove()
+
+
 def render(name: str):
     """Yield ``(label, PIL.Image)`` for one release panel/figure."""
     spec = PANELS[name]
     dpi = int(spec.get("dpi", 300))
     for fig in _run(spec):
+        if spec.get("kind") == "panel":
+            _strip_panel_labels(fig)
         fig.canvas.draw()
         buf = io.BytesIO()
         _ORIG_SAVEFIG(fig, buf, format="png", dpi=dpi, facecolor="white")
