@@ -13,7 +13,7 @@ This repository contains the model, the three final checkpoints, the exact
 training/sampling configs, and the scripts and source data needed to rebuild
 the paper figures.
 
-- **Paper**: WaveFlow enables high-resolution prediction of ocean waves and water levels for coastal hazard warning (manuscript in preparation)
+- **Paper**: WaveFlow enables high-resolution prediction of ocean waves and water levels for coastal hazard warning
 - **Weights** (CC BY 4.0): [10.5281/zenodo.24106732](https://zenodo.org/records/24125637) · [Hugging Face](https://huggingface.co/tikitaka0345/WaveFlow)
 - **Figure source data**: [10.5281/zenodo.24106732](https://zenodo.org/records/24125637) · [Hugging Face](https://huggingface.co/tikitaka0345/WaveFlow)
 - **Code**: [https://github.com/Leroy-Xiong/WaveFlow](https://github.com/Leroy-Xiong/WaveFlow) · **Licence**: MIT (code), CC BY 4.0 (weights/data)
