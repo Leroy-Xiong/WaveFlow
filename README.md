@@ -15,7 +15,6 @@ the paper figures.
 
 - **Paper**: WaveFlow enables high-resolution prediction of ocean waves and water levels for coastal hazard warning
 - **Weights** (CC BY 4.0): [10.5281/zenodo.24106732](https://zenodo.org/records/24127153) · [Hugging Face](https://huggingface.co/tikitaka0345/WaveFlow)
-- **Figure source data**: provided as Source Data with the paper (not hosted here)
 - **Code**: [https://github.com/Leroy-Xiong/WaveFlow](https://github.com/Leroy-Xiong/WaveFlow) · **Licence**: MIT (code), CC BY 4.0 (weights/data)
 
 ## Released models
