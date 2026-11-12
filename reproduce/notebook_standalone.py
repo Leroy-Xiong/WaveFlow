@@ -384,12 +384,69 @@ def fig5h():
 
 def fig5i():
     F, CASE, GLOB = _fig5_modules()
-    _hk, gc, _gth, gt_global = _fig5_data(CASE, GLOB)
-    fig = plt.figure(figsize=(180 / 25.4, 32 / 25.4))
-    GLOB.draw_zoom_row(fig, gc[:, 1], gc[:, 0], gt_global, x0=8.0,
-                       y_top=9.0, map_w=30.0, dx=32.5, canvas=(180.0, 32.0),
-                       ts="20220928T12", tmpls=F.CASE_TMPL,
-                       region=F.CASE_ZOOM, dot_s=0.6)
-    fig.suptitle("Fig. 5i: Hurricane Ian zoom (reference + 4 leads)",
-                 fontsize=9, y=0.99)
+    gc = np.load(REPO / GLOB.COORDS)
+    lats, lons = gc[:, 0], gc[:, 1]
+    ts = "20220928T12"
+    gt = GLOB.gt_hs(ts)
+    tmpls = F.CASE_TMPL
+    lon0, lon1, lat0, lat1 = F.CASE_ZOOM
+
+    fields = [gt] + [GLOB.ens_mean_hs(L, ts, tmpls.get(L)) for L in GLOB.LEADS]
+    sel = ((lons >= lon0) & (lons <= lon1) & (lats >= lat0) & (lats <= lat1))
+    vals_all = np.concatenate([np.asarray(f)[sel] for f in fields])
+    vmin = max(0.0, float(np.nanmin(vals_all)))
+    vmax = float(np.nanmax(vals_all))
+    if not np.isfinite(vmax) or vmax <= vmin:
+        vmin, vmax = 0.0, GLOB.HS_VMAX
+
+    W, H = 180.0, 152.0
+    fig = plt.figure(figsize=(W / 25.4, H / 25.4))
+    map_w = 70.0
+    map_h = map_w * (lat1 - lat0) / (lon1 - lon0)
+    xcols = [12.0, 98.0]
+    yrows = [14.0, 58.0, 102.0]
+    sc = None
+    for i, vals in enumerate(fields):
+        row, col = i // 2, i % 2
+        ax = fig.add_axes([xcols[col] / W, 1 - (yrows[row] + map_h) / H,
+                           map_w / W, map_h / H],
+                          projection=ccrs.PlateCarree())
+        ax.set_extent([lon0, lon1, lat0, lat1], crs=ccrs.PlateCarree())
+        sc = ax.scatter(lons[sel], lats[sel], c=np.asarray(vals)[sel],
+                        s=2.5, cmap="turbo", vmin=vmin, vmax=vmax,
+                        edgecolors="none", linewidths=0,
+                        transform=ccrs.PlateCarree(), rasterized=True)
+        ax.coastlines(linewidth=0.4, color="#555555")
+        title = "Reference" if i == 0 else f"{GLOB.LEADS[i - 1]} h lead"
+        ax.set_title(title, fontsize=8, pad=1.5)
+        xstep = 5
+        ystep = 2
+        xloc = np.arange(np.ceil(lon0 / xstep) * xstep, lon1 + 1e-9, xstep)
+        yloc = np.arange(np.ceil(lat0 / ystep) * ystep, lat1 + 1e-9, ystep)
+        ax.set_xticks(xloc, crs=ccrs.PlateCarree())
+        ax.xaxis.set_major_formatter(GLOB.LONGITUDE_FORMATTER)
+        ax.tick_params(axis="x", labelsize=6, length=2, width=0.5, pad=1.0)
+        if col == 0:
+            ax.set_yticks(yloc, crs=ccrs.PlateCarree())
+            ax.yaxis.set_major_formatter(GLOB.LATITUDE_FORMATTER)
+            ax.tick_params(axis="y", labelsize=6, length=2, width=0.5, pad=0.6)
+            for lab in ax.get_yticklabels():
+                lab.set_rotation(90)
+                lab.set_rotation_mode("anchor")
+                lab.set_ha("center")
+                lab.set_va("bottom")
+        else:
+            ax.tick_params(axis="y", labelleft=False, length=0)
+
+    cax = fig.add_axes([0.22, 0.035, 0.56, 0.010])
+    cb = fig.colorbar(sc, cax=cax, orientation="horizontal")
+    cb.set_label("$H_s$ (m)", fontsize=8, labelpad=4)
+    cb.ax.xaxis.set_label_position("top")
+    cb.ax.tick_params(labelsize=7)
+    step = 2.0 if (vmax - vmin) <= 10 else 5.0
+    ticks = list(np.arange(np.ceil((vmin + 1e-9) / step) * step,
+                           vmax - 1e-6, step))
+    if ticks:
+        cb.set_ticks(ticks)
+    fig.suptitle("Fig. 5i: Hurricane Ian zoom", fontsize=12, y=0.995)
     return fig
