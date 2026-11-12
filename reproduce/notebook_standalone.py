@@ -287,6 +287,7 @@ def fig5g():
             fig, x_left, y, map_w, map_h, vals, lons, lats, title,
             0.0, CASE.HS_VMAX, "turbo", left_labels=True,
             bottom_labels=(i == 4), canvas=(W, H))
+        sc_mean.set_sizes([2.2])
         if lead == 0:
             fig.text(x_right + map_w / 2, 1 - (y + map_h / 2) / H,
                      "P($H_s$>4 m)\n(12-72 h leads)", ha="center",
@@ -299,6 +300,7 @@ def fig5g():
             f"{lead} h lead  P($H_s$>{CASE.EXCEED:.0f} m)", 0.0, 1.0,
             "viridis", left_labels=True, bottom_labels=(i == 4),
             canvas=(W, H))
+        sc_prob.set_sizes([2.2])
         CASE.CASE4.add_gt_contour(axp, gt, lons, lats, level=CASE.EXCEED)
 
     cax = fig.add_axes([0.16, 0.034, 0.30, 0.008])
