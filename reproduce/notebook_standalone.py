@@ -311,7 +311,7 @@ def fig5g():
     cb.set_label("probability  $P(H_s>4$ m$)$", fontsize=8, labelpad=4)
     cb.ax.xaxis.set_label_position("top")
     cb.ax.tick_params(labelsize=7)
-    fig.suptitle("Fig. 5g: Hong Kong Kompasu case, vertical layout",
+    fig.suptitle("Fig. 5g: Hong Kong Kompasu case",
                  fontsize=12, y=0.995)
     return fig
 
@@ -346,7 +346,7 @@ def fig5h():
     cb.set_label("$H_s$ (m)", fontsize=8, labelpad=4)
     cb.ax.xaxis.set_label_position("top")
     cb.ax.tick_params(labelsize=7)
-    fig.suptitle("Fig. 5h: global Hurricane Ian case, 2-column layout",
+    fig.suptitle("Fig. 5h: global Hurricane Ian case",
                  fontsize=12, y=0.995)
     return fig
 
