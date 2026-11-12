@@ -122,6 +122,7 @@ fine-tuning recipes are in **`TRAINING.md`**. In short:
   configs use daily-packed pre-interpolated ERA5 for speed.
 - You also need mesh coordinates, patch clusters and normalization statistics;
   the released `assets.tar.gz` contains the ones used by these checkpoints.
+  Exact values and formulas are in **`NORMALIZATION.md`**.
 
 The third-party hindcast, ERA5/IFS reanalysis and AI forecast fields are **not**
 redistributed;

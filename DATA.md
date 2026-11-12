@@ -38,6 +38,9 @@ test) follows the paper’s Methods.
 
 Neither ERA5 nor IFS ENS is redistributed with this release.
 
+Normalization constants and formulas are in **`NORMALIZATION.md`**; the small
+JSON files are extracted from `assets.tar.gz` by `setup --weights`.
+
 - **ERA5** is the pretraining and reanalysis forcing. Fig. 3f downloads the
   required four frames from the WeatherBench2 ERA5 Zarr on demand and writes
   per-timestamp NetCDF files under `data/era5/wb2/`; no daily packing or

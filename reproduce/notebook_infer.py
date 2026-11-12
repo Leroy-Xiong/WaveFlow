@@ -46,6 +46,15 @@ def fig3f_from_weights(weights: Path | None = None):
     if not weights.exists():
         raise FileNotFoundError(
             f"missing {weights}; run `python reproduce.py setup --weights` first")
+    for stats in (
+        REPO / "data" / "global_hindcast" / "statistics.json",
+        REPO / "data" / "era5" / "era5_statistics_global.json",
+    ):
+        if not stats.exists():
+            raise FileNotFoundError(
+                f"missing normalization statistics {stats}; "
+                "run `python reproduce.py setup --weights` first "
+                "(see NORMALIZATION.md)")
     from wb2_era5 import ensure_wb2_era5
     ensure_wb2_era5(
         ["20220924T00"], region="global",
