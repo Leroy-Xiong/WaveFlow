@@ -318,6 +318,30 @@ def fig5g():
     return fig
 
 
+def _global_field(lons, lats, vals, res=0.5):
+    """Interpolate unstructured global nodes to a regular lon/lat grid."""
+    from scipy.interpolate import griddata
+    from shapely import contains_xy
+    from modules.plot.global_ocean_boundary import get_global_ocean_geometry
+
+    lon360 = lons % 360.0
+    pts = np.column_stack([lon360, lats])
+    ext_pts = np.vstack([pts,
+                         np.column_stack([np.where(lon360 < 30, lon360 + 360, lon360), lats]),
+                         np.column_stack([np.where(lon360 > 330, lon360 - 360, lon360), lats])])
+    ext_vals = np.concatenate([vals, vals, vals])
+    glon = np.arange(0.0, 360.0 + res / 2, res)
+    glat = np.arange(-90.0, 90.0 + res / 2, res)
+    GX, GY = np.meshgrid(glon, glat)
+    zi = griddata(ext_pts, ext_vals, (GX, GY), method="linear")
+    ocean, _coast = get_global_ocean_geometry()
+    lon_shift = ((GX + 180.0) % 360.0) - 180.0
+    keep = contains_xy(ocean, lon_shift.ravel(), GY.ravel()).reshape(GX.shape)
+    zi[~keep] = np.nan
+    order = np.argsort(lon_shift[0])
+    return lon_shift[0][order], glat, zi[:, order]
+
+
 def fig5h():
     F, CASE, GLOB = _fig5_modules()
     gc = np.load(REPO / GLOB.COORDS)
@@ -337,19 +361,24 @@ def fig5h():
         vals = GLOB.ens_mean_hs(lead, ts, tmpls.get(lead))
         items.append(((i + 1) // 2, (i + 1) % 2, vals, f"{lead} h lead"))
 
-    sc = None
+    im = None
     for row, col, vals, title in items:
-        _ax, sc = GLOB.draw_robinson(
-            fig, xcols[col], yrows[row], map_w, map_h, lons, lats, vals,
-            title, "turbo", 0.0, GLOB.HS_VMAX, canvas=(W, H))
+        lon_p, lat_p, zi = _global_field(lons, lats, np.asarray(vals, dtype=float))
+        ax = fig.add_axes([xcols[col] / W, 1 - (yrows[row] + map_h) / H,
+                           map_w / W, map_h / H], projection=ccrs.Robinson())
+        ax.set_global()
+        ax.coastlines(linewidth=0.3, color="#666666")
+        im = ax.pcolormesh(lon_p, lat_p, zi, cmap="turbo", vmin=0.0,
+                           vmax=GLOB.HS_VMAX, transform=ccrs.PlateCarree(),
+                           shading="auto", rasterized=True)
+        ax.set_title(title, fontsize=8, pad=1.5)
 
     cax = fig.add_axes([0.22, 0.035, 0.56, 0.010])
-    cb = fig.colorbar(sc, cax=cax, orientation="horizontal")
+    cb = fig.colorbar(im, cax=cax, orientation="horizontal")
     cb.set_label("$H_s$ (m)", fontsize=8, labelpad=4)
     cb.ax.xaxis.set_label_position("top")
     cb.ax.tick_params(labelsize=7)
-    fig.suptitle("Fig. 5h: global Hurricane Ian case",
-                 fontsize=12, y=0.995)
+    fig.suptitle("Fig. 5h: global Hurricane Ian case", fontsize=12, y=0.995)
     return fig
 
 
