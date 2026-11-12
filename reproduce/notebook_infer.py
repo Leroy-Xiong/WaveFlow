@@ -17,22 +17,27 @@ WEIGHTS = REPO / "weights" / "waveflow-global-hs-ep99.pt"
 
 
 def pick_gpu() -> int:
+    """Restrict this process to one GPU and return its physical index.
+
+    Users usually have one GPU, so do not enumerate every device (querying
+    memory on all GPUs can create contexts on all of them). If the caller set
+    ``CUDA_VISIBLE_DEVICES``, keep only its first entry; otherwise use GPU 0.
+    """
     import torch
 
+    visible = os.environ.get("CUDA_VISIBLE_DEVICES", "").strip()
+    if visible:
+        first = visible.split(",")[0].strip()
+        os.environ["CUDA_VISIBLE_DEVICES"] = first
+        physical = int(first) if first.isdigit() else 0
+    else:
+        os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+        physical = 0
     if not torch.cuda.is_available():
         raise RuntimeError(
             "CUDA is not available. The released sampler expects a GPU; "
             "run this cell on a CUDA machine.")
-    best, best_free = 0, -1
-    for i in range(torch.cuda.device_count()):
-        try:
-            free, _total = torch.cuda.mem_get_info(i)
-        except Exception:
-            free = 0
-        if free > best_free:
-            best, best_free = i, free
-    os.environ["CUDA_VISIBLE_DEVICES"] = str(best)
-    return best
+    return physical
 
 
 def fig3f_from_weights(weights: Path | None = None):
@@ -41,6 +46,11 @@ def fig3f_from_weights(weights: Path | None = None):
     if not weights.exists():
         raise FileNotFoundError(
             f"missing {weights}; run `python reproduce.py setup --weights` first")
+    from wb2_era5 import ensure_wb2_era5
+    ensure_wb2_era5(
+        ["20220924T00"], region="global",
+        out_dir=REPO / "data" / "era5" / "wb2", frames=4,
+    )
     gpu = pick_gpu()
     print(f"using GPU {gpu} for inference; weights: {weights}")
     cmd = [sys.executable, "reproduce.py", "infer", "fig3f", "--no-render"]

@@ -254,10 +254,28 @@ def cmd_infer(args):
     workdir = REPO / (args.out or inf.get("workdir", f"output/repro/{key}"))
     data_dir = REPO / inf["data_dir"]
     region = inf["region"]
+    era5_overrides = []
+    if inf.get("era5_source") == "wb2":
+        from wb2_era5 import ensure_wb2_era5
+        era5_region = "global" if str(region).startswith("global") else "hk"
+        era5_dir = REPO / inf.get("era5_dir", "data/era5/wb2")
+        era5_dir_rel = os.path.relpath(era5_dir, REPO)
+        if not args.dry_run:
+            ensure_wb2_era5(
+                timestamps, region=era5_region, out_dir=era5_dir,
+                frames=int(inf.get("era5_frames", 4)),
+            )
+        era5_overrides = [
+            f"data.era5_dir={era5_dir_rel}",
+            "data.era5_file_format=nc",
+            "data.use_preinterpolated_era5=false",
+        ]
     # 1) zero-valued wave anchors (timestamp enumeration only)
     stub_cmd = [sys.executable, str(HERE / "make_case_stubs.py"),
                 "--region", region, "--timestamps", ",".join(timestamps),
                 "--out", str(data_dir)]
+    if inf.get("era5_source") == "wb2":
+        stub_cmd.append("--no-forcing-check")
     print("[infer] stubs:", " ".join(stub_cmd))
     subprocess.run(stub_cmd, cwd=str(REPO), env=base_env(args), check=True)
     # 2) sampling
@@ -286,6 +304,7 @@ def cmd_infer(args):
     ]
     if inf.get("train_max_year"):
         overrides.append(f"data.train_max_year={inf['train_max_year']}")
+    overrides.extend(era5_overrides)
     cmd = [sys.executable, "-m", "torch.distributed.run",
            f"--nproc_per_node={nproc}", f"--master_port={port}",
            "main.py", "--config", str(config), "--mode", "sample"]

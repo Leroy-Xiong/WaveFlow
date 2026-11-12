@@ -13,9 +13,9 @@ This repository contains the model, the three final checkpoints, the exact
 training/sampling configs, and the scripts and reference panels used to rebuild
 the paper figures.
 
-- **Paper**: WaveFlow enables high-resolution prediction of ocean waves and water levels for coastal hazard warning
-- **Weights** (CC BY 4.0): [10.5281/zenodo.24106732](https://zenodo.org/records/24127153) · [Hugging Face](https://huggingface.co/tikitaka0345/WaveFlow)
-- **Code**: [https://github.com/Leroy-Xiong/WaveFlow](https://github.com/Leroy-Xiong/WaveFlow) · **Licence**: MIT (code), CC BY 4.0 (weights/data)
+- **Paper**: {{PAPER_TITLE}}
+- **Weights** (CC BY 4.0): [{{WEIGHTS_DOI}}]({{WEIGHTS_URL}}) · [Hugging Face]({{HUGGINGFACE_URL}})
+- **Code**: [{{REPO_URL}}]({{REPO_URL}}) · **Licence**: MIT (code), CC BY 4.0 (weights/data)
 
 ## Released models
 
@@ -34,7 +34,7 @@ All checkpoints are EMA-only (the EMA weights are baked into
 ### 1. Install
 
 ```bash
-git clone https://github.com/Leroy-Xiong/WaveFlow waveflow
+git clone {{REPO_URL}} waveflow
 cd waveflow
 conda env create -f environment.yml
 conda activate waveflow
@@ -50,7 +50,7 @@ python reproduce.py setup --weights       # 5.9 GB, SHA256 checked
 ```
 
 or download the three `.pt` files plus `assets.tar.gz` directly from
-[Hugging Face](https://huggingface.co/tikitaka0345/WaveFlow); `assets.tar.gz` restores the mesh
+[Hugging Face]({{HUGGINGFACE_URL}}); `assets.tar.gz` restores the mesh
 coordinates, clusters, statistics and ocean boundary under `data/`.
 
 ### 3. Run an ensemble
@@ -58,9 +58,10 @@ coordinates, clusters, statistics and ocean boundary under `data/`.
 Open [`notebooks/waveflow_reproduce.ipynb`](notebooks/waveflow_reproduce.ipynb):
 it renders every panel as an independent figure, one at a time. Fig. 2a runs
 from the public model assets; Fig. 3f loads the released global Hs weights,
-selects one CUDA GPU, runs a 10-member ensemble, and then plots it. The other
-panels need the paper data tree. No panel is cropped out of the original paper
-canvas. The notebook links 300 dpi PNGs under `notebooks/figures/`.
+downloads its four ERA5 frames from WeatherBench2, selects one CUDA GPU, runs a
+10-member ensemble, and then plots it. The other panels need the paper data
+tree. No panel is cropped out of the original paper canvas. The notebook links
+300 dpi PNGs under `notebooks/figures/`.
 
 For your own inputs, call the sampler directly. The pattern for the Hong Kong
 model is:
@@ -80,9 +81,9 @@ torchrun --nproc_per_node=1 main.py --mode sample \
   -o work_dir.path=output/my_hk_run
 ```
 
-`python reproduce.py setup --download` also fetches the released ERA5/IFS ENS case
-forcing, the small slices used by the inference recipes, so the examples run
-without manual data preparation.
+`python reproduce.py setup --download` also fetches the released IFS ENS case
+forcing used by the forecast panels. Fig. 3f does not need that archive: it
+downloads its ERA5 window from WeatherBench2 on demand.
 
 Samples are written to
 `output/my_hk_run/samples/sample_<timestamp>_ens<NNN>.npz` under the key
@@ -168,4 +169,4 @@ data/, output/       downloaded assets / paper data tree (gitignored)
 ## Citation
 
 If you use WaveFlow, please cite the paper and the dataset records in
-`CITATION.cff`. Questions: TODO <TODO>.
+`CITATION.cff`. Questions: {{CONTACT_NAME}} <{{CONTACT_EMAIL}}>.

@@ -9,11 +9,11 @@ government data.
 The Hong Kong and global wave/water-level hindcasts are third-party products.
 They are used to train the released models and to draw the reference fields.
 
-- Provider: TODO
-- Access: TODO
-- Contact: TODO
+- Provider: {{HINDCAST_PROVIDER}}
+- Access: {{HINDCAST_ACCESS}}
+- Contact: {{HINDCAST_CONTACT}}
 
-> The Hong Kong and global hindcast targets are third-party products and cannot be redistributed with this release.
+> {{HINDCAST_NOTE}}
 
 For five panels (Fig. 5g–i, ED 5, ED 6) only a few reference frames are needed;
 see `REPRODUCE.md` §1 for the exact files and the `WF_GT_*` overrides. If you
@@ -33,13 +33,16 @@ test) follows the paper’s Methods.
 
 | Source | Use | Access | License |
 |---|---|---|---|
-| ERA5 (0.25°, hourly, 4 surface variables) | training forcing; Fig. 2a schematic; inference forcing for 2021/2022/2025 cases | Copernicus Climate Data Store, https://cds.climate.copernicus.eu | Copernicus licence (attribution) |
+| ERA5 (0.25°, hourly, 3 surface variables) | training forcing; Fig. 2a schematic; inference forcing for 2021/2022 cases | Copernicus Climate Data Store, https://cds.climate.copernicus.eu; Fig. 3f auto-downloads from WeatherBench2 `gs://weatherbench2/datasets/era5/1959-2023_01_10-full_37-1h-0p25deg-chunk-1.zarr` | Copernicus licence (attribution) |
 | IFS ENS / HRES (0.25°, 6-hourly, 50 members) | Fig. 5 forecast forcing | ECMWF open data https://data.ecmwf.int/forecasts/ and WeatherBench2 `gs://weatherbench2/datasets/ifs_ens/2018-2022-1440x721.zarr` | ECMWF licence (attribution) |
 
 Neither ERA5 nor IFS ENS is redistributed with this release.
 
-- **ERA5** is the pretraining and reanalysis forcing. Download it from the
-  Copernicus Climate Data Store or the WeatherBench2 ERA5 archive.
+- **ERA5** is the pretraining and reanalysis forcing. Fig. 3f downloads the
+  required four frames from the WeatherBench2 ERA5 Zarr on demand and writes
+  per-timestamp NetCDF files under `data/era5/wb2/`; no daily packing or
+  timestamp index is used. WB2 covers 1959-01-01 to 2023-01-10; later cases
+  need the Copernicus Climate Data Store.
 - **IFS ENS** is the forecast forcing. Download it from WeatherBench2
   (`gs://weatherbench2/datasets/ifs_ens/2018-2022-1440x721.zarr`) or ECMWF
   open data, then export per-member NetCDF files under
@@ -77,8 +80,8 @@ provenance is listed in `THIRD_PARTY.md`.
 
 ## 5. Checksums and manifests
 
-The weight files are hosted on [Hugging Face](https://huggingface.co/tikitaka0345/WaveFlow); the
-[Zenodo record](https://zenodo.org/records/24127153) carries the DOI and the per-file checksums.
+The weight files are hosted on [Hugging Face]({{HUGGINGFACE_URL}}); the
+[Zenodo record]({{WEIGHTS_URL}}) carries the DOI and the per-file checksums.
 
 - `weights/MANIFEST.json`: per-weight SHA256, parameter count, source run.
 - `reproduce/downloads.yaml`: archive URLs and SHA256.

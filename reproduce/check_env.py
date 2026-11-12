@@ -34,6 +34,10 @@ RENDER_EXTRA = [
     ("pyarrow", "pyarrow"),
 ]
 INFER_EXTRA = [("torch", "torch")]
+WB2_EXTRA = [
+    ("xarray", "xarray"), ("zarr", "zarr"), ("gcsfs", "gcsfs"),
+    ("h5netcdf", "h5netcdf"),
+]
 
 
 def _version(modname: str, distname: str) -> str:
@@ -102,6 +106,12 @@ def main(argv=None):
                           "refused (CPU sampling does not reproduce the GPU result)")
             except Exception as exc:
                 print(f"  WARNING: torch check failed: {exc}")
+
+        print("\n[WB2 ERA5 download]")
+        missing = check(WB2_EXTRA)
+        if missing:
+            print("  note: missing WB2 packages; Fig. 3f cannot download ERA5:",
+                  ", ".join(f"{m} ({d})" for m, d in missing))
 
     print("\n[directories]")
     for name in ("weights", "downloads", "reproduced"):

@@ -109,6 +109,11 @@ python reproduce.py infer ed6                     # global 4-var, 2 x 10
 python reproduce.py infer fig6 --nproc 2          # HK, 49 h x 100 members
 ```
 
+`infer fig3f` downloads its four ERA5 frames from WeatherBench2 into
+`data/era5/wb2/` and reads them as per-timestamp NetCDF; it does not need the
+forcing archive or a daily ERA5 index. The other recipes still use the shipped
+IFS ENS / case forcing.
+
 Approximate cost (one 80 GB GPU unless noted):
 
 | Panel | Model | Members × timestamps | Time |

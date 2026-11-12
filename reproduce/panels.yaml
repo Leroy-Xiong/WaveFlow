@@ -63,6 +63,9 @@ panels:
       members: 10
       sample_split: test
       atm_source: era5
+      era5_source: wb2
+      era5_frames: 4
+      era5_dir: data/era5/wb2
       batch_size: 16
       steps: 50
       data_dir: data/global_hindcast/case_stubs/npy_files
