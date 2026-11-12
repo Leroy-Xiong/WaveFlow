@@ -224,7 +224,7 @@ CASE_SPECS = {
         closest_legend="landfall",
         panel_b_title="Tampa Bay peak: 03:00 UTC 27 Sep (23:00 EDT 26 Sep) 2024",
         x_label="time (EDT, 2024)",
-        expo_window_title="48-h peak window (26 Sep 12Z – 28 Sep 12Z)",
+        expo_window_title="60-h window (26 Sep 00Z – 28 Sep 12Z)",
         expo_ylim_km=(0, 140), expo_ylim_pct=(0, 100),
         expo_legend_y=112.8,
         expo_legend_ncol=3,
@@ -264,16 +264,21 @@ CASE_SPECS = {
         # 代表段（build_case_helene.py --waves 排名后人工选定）：e 面板改配
         # 4 个最近的有 Hs 记录的 NDBC 浮标（fetch_buoys_helene.py），类型
         # 覆盖三个堤顶等级
+        # 代表段（2026-11-12 按"预报-分析吻合 + 强信号"全域重选）：四段均
+        # 为低洼（风暴潮期间整体没入水中、堰流平台），预报/分析中位 q 峰值比
+        # 0.78/0.97/0.76/0.90，峰值时刻全部落在预警窗口内，持续 34-40 h；
+        # panel e 的四浮标固定（离岸验证点），与段不再就近配对
         panel_c_segs=[
             dict(seg_id=750, name="Clearwater Beach",
                  kind="low-lying (<1 m)", e_gauge="NDBC 42098 (Egmont)"),
-            dict(seg_id=417, name="Downtown St. Petersburg",
-                 kind="dune/berm (1-2.5 m)", e_gauge="NDBC 42036 (W Tampa)"),
-            dict(seg_id=217, name="Port Manatee",
-                 kind="high ridge (>2.5 m)",
+            dict(seg_id=389, name="St. Petersburg NE",
+                 kind="low-lying (<1 m)", e_gauge="NDBC 42036 (W Tampa)"),
+            dict(seg_id=54, name="St. Pete Beach",
+                 kind="low-lying (<1 m)",
                  e_gauge="NDBC 42097 (Pulley Ridge)"),
-            dict(seg_id=250, name="East Bay",
-                 kind="dune/berm (1-2.5 m)", e_gauge="NDBC 42095 (Satan Shoal)"),
+            dict(seg_id=924, name="Downtown Tampa",
+                 kind="low-lying (<1 m)",
+                 e_gauge="NDBC 42095 (Satan Shoal)"),
         ],
     ),
 }
@@ -281,8 +286,6 @@ _SPEC = CASE_SPECS[CASE]
 
 # 混合堤顶产品（官方 DTM + flag1/2 段 SpotHeight 替换）：主图唯一数据源
 SEG_CSV = _SPEC.get("seg_csv", "data/hk_coastline/hk_coastline_segments.csv")
-# Release override: the q products can be redirected (e.g. to the output of
-# compute_overtopping_saola.py rerun on freshly inferred samples).
 SUMMARY_CSV = os.environ.get("WF_FIG6_SUMMARY_CSV", _SPEC["summary_csv"])
 NPZ_M100 = os.environ.get("WF_FIG6_Q_NPZ", _SPEC["npz_m100"])
 NPZ_M10 = os.environ.get("WF_FIG6_Q_NPZ_M10", _SPEC["npz_m10"])
@@ -298,8 +301,6 @@ NPZ_M100_TERR = "data/hk_coastline/overtopping/saola_q_m100.npz"
 HKO_JSON = _SPEC["hko_json"]
 DIST_CSV = "data/hk_coastline/landsd_official/osm_vs_landsd_distances.csv"
 COORDS = _SPEC.get("coords", "data/hindcast/hk_coordinates.npy")
-# Release override: the run root and the 100-member sample dir are
-# redirectable (e.g. to freshly inferred samples).
 RUN = os.environ.get(
     "WF_HK_RUN",
     _SPEC.get("run", ("output/results/hk_cleaned/all_var/"
@@ -307,10 +308,10 @@ RUN = os.environ.get(
                       "size_sweep/base_v1_20260821_025917")))
 SAMPLES_M100 = os.environ.get(
     "WF_FIG6_SAMPLES_M100",
-    os.environ.get(
-        "FIG6_SAMP_M100",
-        _SPEC.get("samples_dir")
-        or os.path.join(RUN, _SPEC["samples_m100"], "test/samples")))
+    os.environ.get("FIG6_SAMP_M100",
+                   _SPEC.get("samples_dir")
+                   or os.path.join(RUN, _SPEC["samples_m100"],
+                                   "test/samples")))
 # FIG6_SUBSET=1：SAMPLES_M100 指向远端镜像回来的"节点子集"树（sample 已是
 # (n_subset, 4)，节点顺序 == 排序后的 node_subset npz），加载时不再按节点号索引
 SUBSET_MODE = os.environ.get("FIG6_SUBSET", "0") == "1"

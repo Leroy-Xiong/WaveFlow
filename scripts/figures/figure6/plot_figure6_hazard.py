@@ -71,10 +71,10 @@ _INSETS_BY_CASE = {
     "helene": [
         dict(tag="b1", region=[-82.845, -82.795, 27.955, 27.997],
              tag_xy=(-82.844, 27.953), stars=[750]),    # Clearwater Beach
-        dict(tag="b2", region=[-82.650, -82.600, 27.741, 27.783],
-             tag_xy=(-82.649, 27.739), stars=[417]),    # Downtown St. Pete
-        dict(tag="b3", region=[-82.590, -82.540, 27.618, 27.660],
-             tag_xy=(-82.589, 27.616), stars=[217]),    # Port Manatee
+        dict(tag="b2", region=[-82.611, -82.561, 27.856, 27.898],
+             tag_xy=(-82.610, 27.854), stars=[389]),    # St. Pete NE shore
+        dict(tag="b3", region=[-82.640, -82.590, 27.489, 27.531],
+             tag_xy=(-82.639, 27.487), stars=[54]),     # St. Pete Beach
     ],
 }
 INSETS = _INSETS_BY_CASE[C.CASE]

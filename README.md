@@ -57,9 +57,10 @@ coordinates, clusters, statistics and ocean boundary under `data/`.
 
 Open [`notebooks/waveflow_reproduce.ipynb`](notebooks/waveflow_reproduce.ipynb):
 it renders every panel as an independent figure, one at a time. Fig. 2a runs
-from the public model assets; the other panels need the paper data tree. No
-panel is cropped out of the original paper canvas. The notebook links 300 dpi
-PNGs under `notebooks/figures/`.
+from the public model assets; Fig. 3f loads the released global Hs weights,
+selects one CUDA GPU, runs a 10-member ensemble, and then plots it. The other
+panels need the paper data tree. No panel is cropped out of the original paper
+canvas. The notebook links 300 dpi PNGs under `notebooks/figures/`.
 
 For your own inputs, call the sampler directly. The pattern for the Hong Kong
 model is:

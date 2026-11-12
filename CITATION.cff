@@ -2,7 +2,7 @@ cff-version: 1.2.0
 message: "If you use this code or weights, please cite the paper and the Zenodo record below."
 title: "WaveFlow v1.0.0"
 version: "1.0.0"
-date-released: "2026-11-11"
+date-released: "2026-11-12"
 license: "MIT"
 repository-code: "https://github.com/Leroy-Xiong/WaveFlow"
 url: "https://github.com/Leroy-Xiong/WaveFlow"
